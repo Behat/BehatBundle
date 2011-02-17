@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<container xmlns="http://www.symfony-project.org/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="behat.paths.base">BEHAT_WORK_PATH/Features</parameter>
+
+        <parameter key="behat.paths.steps" type="collection">
+            <parameter>%behat.paths.base%/steps</parameter>
+            <parameter>BEHAT_BUNDLE_PATH/Resources/features/steps</parameter>
+        </parameter>
+
+        <parameter key="behat.paths.steps.i18n" type="collection">
+            <parameter>%behat.paths.base%/steps/i18n</parameter>
+            <parameter>BEHAT_BUNDLE_PATH/Resources/features/steps/i18n</parameter>
+        </parameter>
+
+        <parameter key="behat.paths.bootstrap" type="collection">
+            <parameter>%behat.paths.support%/bootstrap.php</parameter>
+            <parameter>BEHAT_BUNDLE_PATH/Resources/features/support/bootstrap.php</parameter>
+        </parameter>
+
+        <parameter
+            key="behat.environment.class">Behat\BehatBundle\Environment\SymfonyBrowserEnvironment</parameter>
+    </parameters>
+    <services>
+
+        <service id="behat.environment" class="%behat.environment.class%">
+            <argument type="service" id="service_container" />
+        </service>
+
+    </services>
+</container>
