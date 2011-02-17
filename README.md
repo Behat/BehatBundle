@@ -17,8 +17,8 @@ See [Behat official site](http://behat.org) for more info.
 
 ### Put Gherkin & Behat libs inside vendors folder
 
-    git submodule add git://github.com/Behat/Gherkin src/vendor/Gherkin
-    git submodule add git://github.com/Behat/Behat src/vendor/Behat
+    git submodule add git://github.com/Behat/Gherkin vendor/Gherkin
+    git submodule add git://github.com/Behat/Behat vendor/Behat
 
 ### Add Gherkin, Behat & BehatBundle namespaces to autoload
 
