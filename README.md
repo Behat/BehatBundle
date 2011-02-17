@@ -83,19 +83,19 @@ This command runs all features inside single bundle:
 
 to run HelloBundle application tests. But don't forget to configure routing to include test routes.
 
-### Run features by hand
+### Run features by path
 
 This command runs specified feature:
 
-    php app/console behat:test:feature src/Application/HelloBundle/Tests/Features/SingleFeature.feature
+    php app/console behat:test:path src/Application/HelloBundle/Tests/Features/SingleFeature.feature
 
 All features inside `src/Application/HelloBundle/Tests/Features` folder:
 
-    php app/console behat:test:feature src/Application/HelloBundle/Tests/Features
+    php app/console behat:test:path src/Application/HelloBundle/Tests/Features
 
 Single scenario on line 21 in specified feature:
 
-    php app/console behat:test:feature src/Application/HelloBundle/Tests/Features/SingleFeature.feature:21
+    php app/console behat:test:path src/Application/HelloBundle/Tests/Features/SingleFeature.feature:21
 
 ### Options
 
