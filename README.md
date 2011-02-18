@@ -11,9 +11,18 @@ See [Behat official site](http://behat.org) for more info.
 
 ## Installation
 
-### Add Behat\BehatBundle to your src dir
+### Add Behat\BehatBundle to your src dir.
+
+If you're on PR# release:
 
     git submodule add git://github.com/Behat/BehatBundle.git src/Behat/BehatBundle
+
+If you're on fabpot's master:
+
+    git submodule add git://github.com/Behat/BehatBundle.git src/Behat/BehatBundle
+    cd src/Behat/BehatBundle
+    git checkout trunk
+    cd ../../../
 
 ### Put Gherkin & Behat libs inside vendors folder
 
