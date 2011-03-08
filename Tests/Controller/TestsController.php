@@ -2,7 +2,8 @@
 
 namespace Behat\BehatBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller,
+    Symfony\Component\HttpFoundation\RedirectResponse;
 
 /*
  * This file is part of the BehatBundle.
@@ -28,7 +29,7 @@ class TestsController extends Controller
 
     public function redirectAction()
     {
-        return $this->redirect($this->generateUrl('behat_tests_page', array('page' => 'page1')));
+        return new RedirectResponse($this->generateUrl('behat_tests_page', array('page' => 'page1')));
     }
 
     public function formAction()
