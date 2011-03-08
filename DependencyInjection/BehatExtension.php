@@ -2,8 +2,9 @@
 
 namespace Behat\BehatBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\ContainerBuilder,
+    Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
+    Symfony\Component\Config\FileLocator;
 
 use Behat\Behat\DependencyInjection\BehatExtension as BaseExtension;
 
@@ -33,9 +34,9 @@ class BehatExtension extends BaseExtension
         $behatLibPath   = realpath(dirname($behatClassLoaderReflection->getFilename()) . '/../../../../');
         $gherkinLibPath = realpath(dirname($gherkinParserReflection->getFilename()) . '/../../../');
 
-        $loader = new XmlFileLoader($container);
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config/'));
         $loader->load($behatLibPath . '/src/Behat/Behat/DependencyInjection/config/behat.xml');
-        $loader->load(__DIR__ . '/../Resources/config/behat_bundle.xml');
+        $loader->load('behat_bundle.xml');
 
         $container->setParameter('gherkin.paths.lib', $gherkinLibPath);
         $container->setParameter('behat.paths.lib', $behatLibPath);
