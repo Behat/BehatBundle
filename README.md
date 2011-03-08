@@ -3,7 +3,7 @@ See [Behat official site](http://behat.org) for more info.
 
 ## Features
 
-- Support latest Symfony2 release (PR6)
+- Support latest Symfony2 Standart Edition (PR7)
 - Fully integrates with Symfony2 project
 - Fully tested with Behat itself
 - Covers basic functional testing needs
@@ -15,47 +15,38 @@ See [Behat official site](http://behat.org) for more info.
 
 If you're on PR# release:
 
-    git submodule add git://github.com/Behat/BehatBundle.git src/Behat/BehatBundle
-
-If you're on fabpot's master:
-
-    git submodule add git://github.com/Behat/BehatBundle.git src/Behat/BehatBundle
-    cd src/Behat/BehatBundle
-    git checkout trunk
-    cd ../../../
+    mkdir vendor/bundles/Behat
+    git submodule add git://github.com/Behat/BehatBundle.git vendor/bundles/Behat/BehatBundle
 
 ### Put Gherkin & Behat libs inside vendors folder
 
-    git submodule add git://github.com/Behat/Gherkin vendor/Gherkin
-    git submodule add git://github.com/Behat/Behat vendor/Behat
+    git submodule add git://github.com/Behat/gherkin vendor/gherkin
+    git submodule add git://github.com/Behat/behat vendor/behat
 
 ### Add Gherkin, Behat & BehatBundle namespaces to autoload
 
     // app/autoload.php
     $loader->registerNamespaces(array(
         // ...
-        'Behat\\Gherkin'        => __DIR__.'/../vendor/Gherkin/src',
-        'Behat\\Behat'          => __DIR__.'/../vendor/Behat/src',
-        'Behat\\BehatBundle'    => __DIR__.'/../src',
+        'Behat\\Gherkin'        => __DIR__.'/../vendor/gherkin/src',
+        'Behat\\Behat'          => __DIR__.'/../vendor/behat/src',
+        'Behat\\BehatBundle'    => __DIR__.'/../vendor/bundles',
         // ...
     ));
 
 ### Add BehatBundle into your application kernel
 
     // app/AppKernel.php
-    public function registerBundles()
-    {
-        return array(
-            // ...
-            new Behat\BehatBundle\BehatBundle(),
-            // ...
-        );
+    if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        ...
+        $bundles[] = new Behat\BehatBundle\BehatBundle();
+        ...
     }
 
 ### Add behat configuration into your config
 
     # app/config/config.yml
-    behat.config: ~
+    behat: ~
 
 ### Configuration parameters
 
@@ -67,7 +58,7 @@ For example, by default Behat uses *pretty* formatter. If you want to always use
 specifying `-f ...` option everytime, add this to your config:
 
     # app/config/config.yml
-    behat.config:
+    behat:
       format:
         name:   progress
 
@@ -84,13 +75,17 @@ BehatBundle comes bundled with core steps. Look at them inside Bundle's `Behat/B
 
 BehatBundle provides some very useful CLI commands for running your features.
 
+### Init bundle test suite structure
+
+This command will create initial bundle features directory:
+
+    php app/console behat:test:bundle --init Acme\\DemoBundle
+
 ### Run bundle tests
 
 This command runs all features inside single bundle:
 
-    php app/console behat:test:bundle Application\\HelloBundle
-
-to run HelloBundle application tests. But don't forget to configure routing to include test routes.
+    php app/console behat:test:bundle Acme\\DemoBundle
 
 ### Run features by path
 
