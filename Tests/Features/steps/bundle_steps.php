@@ -17,7 +17,6 @@ $steps->Given('/^a feature named "([^"]*)" with:$/', function($world, $filename,
 
 $steps->When('/^I run "([^"]*)"$/', function($world, $command) {
     $world->command = str_replace('%features_path%', $world->path, $command);
-    $world->command = str_replace('./console', './console_dev', $world->command);
 
     // Execute command
     exec($world->command, $world->output, $world->return);
