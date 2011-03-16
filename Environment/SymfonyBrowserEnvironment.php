@@ -3,7 +3,6 @@
 namespace Behat\BehatBundle\Environment;
 
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Framework\Client;
 
 use Behat\Behat\Environment\Environment;
 
@@ -87,7 +86,7 @@ class SymfonyBrowserEnvironment extends Environment
     {
         return new $class(
             isset($options['environment'])  ? $options['environment']   : 'test'
-          , isset($options['debug'])        ? $optoins['debug']         : true
+          , isset($options['debug'])        ? $options['debug']         : true
         );
     }
 }
