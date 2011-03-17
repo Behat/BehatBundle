@@ -16,12 +16,12 @@ See [Behat official site](http://behat.org) for more info.
 If you're on PR# release:
 
     mkdir vendor/bundles/Behat
-    git submodule add git://github.com/Behat/BehatBundle.git vendor/bundles/Behat/BehatBundle
+    git submodule add -f git://github.com/Behat/BehatBundle.git vendor/bundles/Behat/BehatBundle
 
 ### Put Gherkin & Behat libs inside vendors folder
 
-    git submodule add git://github.com/Behat/gherkin vendor/gherkin
-    git submodule add git://github.com/Behat/behat vendor/behat
+    git submodule add -f git://github.com/Behat/Gherkin.git vendor/gherkin
+    git submodule add -f git://github.com/Behat/Behat.git vendor/behat
 
 ### Add Gherkin, Behat & BehatBundle namespaces to autoload
 
