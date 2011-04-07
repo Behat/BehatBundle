@@ -167,7 +167,7 @@ class TestBundleCommand extends BehatCommand
     /**
      * {@inheritdoc}
      */
-    protected function configureContainer($configFile = null)
+    protected function configureContainer($configFile = null, $profile = null)
     {
         return $this->getApplication()->getKernel()->getContainer();
     }
@@ -202,7 +202,7 @@ class TestBundleCommand extends BehatCommand
      * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
      * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
      */
-    protected function createFeaturesPath(ContainerInterface $container, OutputInterface $output)
+    protected function createFeaturesPath($featuresPath = null, ContainerInterface $container, OutputInterface $output)
     {
         $this->pathTokens['BEHAT_WORK_PATH'] = $this->preparePath(
             $this->bundlePath . DIRECTORY_SEPARATOR . 'Tests', true

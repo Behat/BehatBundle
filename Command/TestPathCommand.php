@@ -157,7 +157,7 @@ class TestPathCommand extends BehatCommand
     /**
      * {@inheritdoc}
      */
-    protected function configureContainer($configFile = null)
+    protected function configureContainer($configFile = null, $profile = null)
     {
         return $this->getApplication()->getKernel()->getContainer();
     }
