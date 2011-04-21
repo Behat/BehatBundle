@@ -6,6 +6,7 @@ Feature: Form Steps
   Background:
     Given basic BehatBundle environment
 
+  @javascript
   Scenario: Simple Browsing
     Given a feature named "form.feature" with:
       """
@@ -13,13 +14,13 @@ Feature: Form Steps
         Basic Response Steps
 
         Background:
-          Given I am on /behat/tests/form
+          Given I am on /_behat/tests/form
 
         Scenario: Simple Form Send
           Given I fill in "name" with "ever"
           And I fill in "age" with "23"
           And I select "programmer" from "speciality"
-          When I press "Send spec info" in user form
+          When I press "Send spec info"
           Then I should see "POST recieved"
           And I should see "ever is 23 years old programmer"
       """
@@ -31,4 +32,3 @@ Feature: Form Steps
       1 scenario (1 passed)
       7 steps (7 passed)
       """
-

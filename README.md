@@ -3,11 +3,11 @@ See [Behat official site](http://behat.org) for more info.
 
 ## Features
 
-- Support latest Symfony2 Standart Edition (PR7)
+- Support latest Symfony2 Standart Edition
 - Fully integrates with Symfony2 project
-- Fully tested with Behat itself
+- Uses `MinkBundle` to talk with browser emulators
+- Fully tested with `BehatBundle` itself
 - Covers basic functional testing needs
-- Beautifull bundle testing possibilities
 
 ## Installation
 
@@ -15,61 +15,91 @@ See [Behat official site](http://behat.org) for more info.
 
 If you're on PR# release:
 
-    mkdir vendor/bundles/Behat
-    git submodule add -f git://github.com/Behat/BehatBundle.git vendor/bundles/Behat/BehatBundle
+``` bash
+git submodule add -f git://github.com/Behat/BehatBundle.git vendor/Behat/BehatBundle
+```
 
 ### Put Gherkin & Behat libs inside vendors folder
 
-    git submodule add -f git://github.com/Behat/Gherkin.git vendor/gherkin
-    git submodule add -f git://github.com/Behat/Behat.git vendor/behat
+``` php
+git submodule add -f git://github.com/Behat/Gherkin.git vendor/Behat/Gherkin
+git submodule add -f git://github.com/Behat/Behat.git vendor/Behat/Behat
+```
 
 ### Add Gherkin, Behat & BehatBundle namespaces to autoload
 
-    // app/autoload.php
-    $loader->registerNamespaces(array(
-        // ...
-        'Behat\\Gherkin'        => __DIR__.'/../vendor/gherkin/src',
-        'Behat\\Behat'          => __DIR__.'/../vendor/behat/src',
-        'Behat\\BehatBundle'    => __DIR__.'/../vendor/bundles',
-        // ...
-    ));
+``` php
+<?php
+// app/autoload.php
+$loader->registerNamespaces(array(
+    // ...
+    'Behat\BehatBundle' => __DIR__.'/../vendor',
+    'Behat\Behat'       => __DIR__.'/../vendor/Behat/Behat/src',
+    'Behat\Gherkin'     => __DIR__.'/../vendor/Behat/Gherkin/src',
+    // ...
+));
+```
 
 ### Add BehatBundle into your application kernel
 
-    // app/AppKernel.php
-    if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-        ...
-        $bundles[] = new Behat\BehatBundle\BehatBundle();
-        ...
-    }
+``` php
+<?php
+// app/AppKernel.php
+if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+    ...
+    $bundles[] = new Behat\BehatBundle\BehatBundle();
+
+    // include PHPUnit assertions
+    require_once 'PHPUnit/Autoload.php';
+    require_once 'PHPUnit/Framework/Assert/Functions.php';
+    ...
+}
+```
 
 ### Add behat configuration into your config
 
-    # app/config/config.yml
-    behat: ~
+``` yml
+# app/config/config_dev.yml
+behat: ~
+```
 
 ### Configuration parameters
 
-BehatBundle have configuration alias:
+BehatBundle supports almost all parameters, that `behat` itself support (exluding profiles and imports). Read [Behat configuration documentation](http://docs.behat.org/en/behat/configuration.html).
 
-- `behat.config` is core configurator of BehatBundle. Specify default formatter parameters and output options here.
+### Where to place features
 
-For example, by default Behat uses *pretty* formatter. If you want to always use *progress* formatter instead of
-specifying `-f ...` option everytime, add this to your config:
+Behat will search for next foleder structure (when running bundle features):
 
-    # app/config/config.yml
-    behat:
-      format:
-        name:   progress
+    path/to/your/BundleBundleBundle
+    ├── Features
+    │   ├── feature1.feature
+    │   ├── feature2.feature
+    │   ├── feature3.feature
+    │   ├── support
+    │   │   ├── bootstrap.php
+    │   │   ├── env.php
+    │   │   └── hooks.php
+    │   └── steps
+    │       └── your_steps.php
+    ├── ...
+    └── ...
 
-## Write features
-
-Put your features inside your `BundleName/Tests/Features/` directory, steps inside `BundleName/Tests/Features/steps`.
-`hooks.php`, `bootstrap.php` and `env.php` inside `Bundle/Tests/Features/support`.
+Notice, that from Symfony2 PR12, BehatBundle stores features in `/path/to/BundleBundleBundle/Features`, not in `/path/to/BundleBundleBundle/Tests/Features`. This was done, because Behat features is more than simple tests and it should be used for bundle/project architect, not just for tests.
 
 ### Core steps
 
-BehatBundle comes bundled with core steps. Look at them inside Bundle's `Behat/BehatBundle/Resources/features` folder. Also, you can view how to use them by looking at `Behat/BehatBundle/Tests/Features/*` core BehatBundle tests.
+BehatBundle and MinkBundle comes bundled with core steps. Find all available steps with:
+
+``` bash
+app/console behat:test:bundle Your\\Bundle\\Namespace --steps
+```
+
+or even in your language (if MinkBundle steps support it):
+
+``` bash
+app/console behat:test:bundle Your\\Bundle\\Namespace --steps --lang fr
+```
 
 ## Command line
 
@@ -103,11 +133,12 @@ Single scenario on line 21 in specified feature:
 
 ### Options
 
-BehatBundle supports all options, that Behat itself supports, including:
+BehatBundle supports almost all options, that Behat itself supports, including:
 
 - `--format` or `-f`: switch formatter (default ones is *progress* & *pretty*)
 - `--no-colors`: turn-off colors in formatter
 - `--lang ...`: output formatter locale
+- `--name ...`: filter features/scenarios by name
 - `--tags ...`: filter features/scenarios by tag
 
 ## CREDITS

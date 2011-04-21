@@ -3,30 +3,29 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <parameters>
-        <parameter key="behat.paths.base">BEHAT_WORK_PATH/Features</parameter>
+
+        <parameter key="behat.environment.class">Behat\BehatBundle\Environment\MinkEnvironment</parameter>
 
         <parameter key="behat.paths.steps" type="collection">
-            <parameter>%behat.paths.base%/steps</parameter>
-            <parameter>BEHAT_BUNDLE_PATH/Resources/features/steps</parameter>
+            <parameter>%behat.paths.features%/steps</parameter>
+            <parameter>%mink.paths.lib%/src/Behat/Mink/Integration/steps</parameter>
+        </parameter>
+        <parameter key="behat.paths.steps_i18n" type="collection">
+            <parameter>%behat.paths.features%/steps/i18n</parameter>
+            <parameter>%mink.paths.lib%/src/Behat/Mink/Integration/steps/i18n</parameter>
+        </parameter>
+        <parameter key="behat.paths.hooks" type="collection">
+            <parameter>%behat.paths.support%/hooks.php</parameter>
+            <parameter>%mink.paths.lib%/src/Behat/Mink/Integration/support/hooks.php</parameter>
         </parameter>
 
-        <parameter key="behat.paths.steps.i18n" type="collection">
-            <parameter>%behat.paths.base%/steps/i18n</parameter>
-            <parameter>BEHAT_BUNDLE_PATH/Resources/features/steps/i18n</parameter>
-        </parameter>
-
-        <parameter key="behat.paths.bootstrap" type="collection">
-            <parameter>%behat.paths.support%/bootstrap.php</parameter>
-            <parameter>BEHAT_BUNDLE_PATH/Resources/features/support/bootstrap.php</parameter>
-        </parameter>
-
-        <parameter
-            key="behat.environment.class">Behat\BehatBundle\Environment\SymfonyBrowserEnvironment</parameter>
     </parameters>
     <services>
 
-        <service id="behat.environment" class="%behat.environment.class%">
-            <argument type="service" id="service_container" />
+        <service id="behat.environment" class="%behat.environment.class%" scope="prototype">
+            <argument>%behat.mink.start_url%</argument>
+            <argument type="service" id="behat.mink" />
+            <argument type="service" id="kernel" />
         </service>
 
     </services>

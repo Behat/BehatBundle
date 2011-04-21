@@ -2,7 +2,7 @@
 
 $steps->Given('/^basic BehatBundle environment$/', function($world) {
     $world->path = sys_get_temp_dir() . '/BehatBundle/features';
-    $world->root = $world->getClient()->getKernel()->getContainer()->getParameter('kernel.root_dir');
+    $world->root = $world->getKernel()->getContainer()->getParameter('kernel.root_dir');
 
     if (!is_dir($world->path)) {
         mkdir($world->path, 0777, true);
@@ -21,7 +21,9 @@ $steps->When('/^I run "([^"]*)"$/', function($world, $command) {
     // Execute command
     exec($world->command, $world->output, $world->return);
     $world->output = trim(implode("\n", $world->output));
-    $world->output = str_replace(realpath(__DIR__ . '/../../../Resources') . '/', '', $world->output);
+    $world->output = str_replace(
+        $world->getKernel()->getContainer()->getParameter('mink.paths.lib') . '/src/', '', $world->output
+    );
 });
 
 $steps->Then('/^Print last command output$/', function($world) {
