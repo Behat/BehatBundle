@@ -15,7 +15,7 @@ See [Behat official site](http://behat.org) for more info.
 
 BehatBundle uses MinkBundle internally to run features against different browser emulators.
 
-So, you **need to install `Behat\\MinkBundle` first**, as described [here](https://github.com/Behat/MinkBundle#readme).
+So, you **need to install `Behat\MinkBundle` first**, as described [here](https://github.com/Behat/MinkBundle#readme).
 
 ### Add Behat\BehatBundle to your src dir.
 
