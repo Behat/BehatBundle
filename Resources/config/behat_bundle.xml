@@ -8,15 +8,22 @@
 
         <parameter key="behat.paths.steps" type="collection">
             <parameter>%behat.paths.features%/steps</parameter>
+            <parameter>%kernel.root_dir%/Features/steps</parameter>
             <parameter>%mink.paths.lib%/src/Behat/Mink/Integration/steps</parameter>
         </parameter>
         <parameter key="behat.paths.steps_i18n" type="collection">
             <parameter>%behat.paths.features%/steps/i18n</parameter>
+            <parameter>%kernel.root_dir%/Features/steps/i18n</parameter>
             <parameter>%mink.paths.lib%/src/Behat/Mink/Integration/steps/i18n</parameter>
         </parameter>
         <parameter key="behat.paths.hooks" type="collection">
             <parameter>%behat.paths.support%/hooks.php</parameter>
+            <parameter>%kernel.root_dir%/Features/support/hooks.php</parameter>
             <parameter>%mink.paths.lib%/src/Behat/Mink/Integration/support/hooks.php</parameter>
+        </parameter>
+        <parameter key="behat.paths.environment" type="collection">
+            <parameter>%behat.paths.support%/env.php</parameter>
+            <parameter>%kernel.root_dir%/Features/support/env.php</parameter>
         </parameter>
 
     </parameters>
