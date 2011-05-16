@@ -36,8 +36,10 @@ $steps->Then('/^It should (fail|pass) with:$/', function($world, $success, $data
     } else {
         assertEquals(0, $world->return);
     }
+    $realData = preg_replace('/\# \/.*BehatBundle\//', '# ', (string) $world->output);
+
     try {
-        assertEquals((string) $data, $world->output);
+        assertEquals((string) $data, $realData);
     } catch (Exception $e) {
         $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
         throw new Exception($diff, $e->getCode(), $e);

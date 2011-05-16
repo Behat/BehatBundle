@@ -54,7 +54,7 @@ Feature: Response Steps
           From scenario `I should not see'.          # features/response.feature:22
 
       02. element with locator: "//ul/li/a/p" not found
-          In step `And I should see "//ul/li/a/p" element'. # Behat/Mink/Integration/steps/mink_steps.php:133
+          In step `And I should see "//ul/li/a/p" element'. # Behat/Mink/Integration/steps/mink_steps.php:141
           From scenario `I should see element'.             # features/response.feature:28
 
       5 scenarios (3 passed, 2 failed)
