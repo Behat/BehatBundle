@@ -38,6 +38,10 @@ class MinkEnvironment extends Environment
         $this->mink     = $mink;
         $this->kernel   = $kernel;
 
+        $this->setParameter('default_driver',
+            $kernel->getContainer()->getParameter('behat.mink.default_session')
+        );
+
         $this->getPathTo = function($path) use($startUrl) {
             return 0 !== strpos('http', $path) ? $startUrl . ltrim($path, '/') : $path;
         };
