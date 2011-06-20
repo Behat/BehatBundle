@@ -38,7 +38,7 @@ class MinkEnvironment extends Environment
         $this->mink     = $mink;
         $this->kernel   = $kernel;
 
-        $this->setParameter('default_driver',
+        $this->setParameter('default_session',
             $kernel->getContainer()->getParameter('behat.mink.default_session')
         );
 
