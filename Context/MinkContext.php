@@ -2,7 +2,8 @@
 
 namespace Behat\BehatBundle\Context;
 
-use Behat\Mink\Behat\Context\MinkContext as BaseContext;
+use Behat\Mink\Mink,
+    Behat\Mink\Behat\Context\MinkContext as BaseContext;
 
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -27,6 +28,12 @@ class MinkContext extends BaseContext
      * @var     Symfony\Component\HttpKernel\HttpKernelInterface
      */
     private $kernel;
+    /**
+     * Mink instance.
+     *
+     * @var     Behat\Mink\Mink
+     */
+    private static $mink;
 
     /**
      * Initializes context.
@@ -36,6 +43,11 @@ class MinkContext extends BaseContext
     public function __construct(HttpKernelInterface $kernel)
     {
         $this->kernel = $kernel;
+
+        if (null === self::$mink) {
+            self::$mink = $this->getContainer()->get('behat.mink');
+            $this->registerSessions(self::$mink);
+        }
 
         foreach ($this->getStepsContexts() as $context) {
             $this->useContext($context);
@@ -69,13 +81,16 @@ class MinkContext extends BaseContext
      */
     public function getMink()
     {
-        static $mink;
+        return self::$mink;
+    }
 
-        if (null === $mink) {
-            $mink = $this->getContainer()->get('behat.mink');
-        }
-
-        return $mink;
+    /**
+     * Registers additional Mink sessions.
+     *
+     * @param   Behat\Mink\Mink     $mink   Mink manager instance
+     */
+    protected function registerSessions(Mink $mink)
+    {
     }
 
     /**
