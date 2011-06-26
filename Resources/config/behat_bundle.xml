@@ -3,37 +3,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <parameters>
-
-        <parameter key="behat.environment.class">Behat\BehatBundle\Environment\MinkEnvironment</parameter>
-
-        <parameter key="behat.paths.steps" type="collection">
-            <parameter>%behat.paths.features%/steps</parameter>
-            <parameter>%kernel.root_dir%/Features/steps</parameter>
-            <parameter>%mink.paths.lib%/src/Behat/Mink/Integration/steps</parameter>
-        </parameter>
-        <parameter key="behat.paths.steps_i18n" type="collection">
-            <parameter>%behat.paths.features%/steps/i18n</parameter>
-            <parameter>%kernel.root_dir%/Features/steps/i18n</parameter>
-            <parameter>%mink.paths.lib%/src/Behat/Mink/Integration/steps/i18n</parameter>
-        </parameter>
-        <parameter key="behat.paths.hooks" type="collection">
-            <parameter>%behat.paths.support%/hooks.php</parameter>
-            <parameter>%kernel.root_dir%/Features/support/hooks.php</parameter>
-            <parameter>%mink.paths.lib%/src/Behat/Mink/Integration/support/hooks.php</parameter>
-        </parameter>
-        <parameter key="behat.paths.environment" type="collection">
-            <parameter>%behat.paths.support%/env.php</parameter>
-            <parameter>%kernel.root_dir%/Features/support/env.php</parameter>
-        </parameter>
-
+        <parameter key="behat.context_dispatcher.class">Behat\BehatBundle\Context\ContextDispatcher</parameter>
     </parameters>
     <services>
-
-        <service id="behat.environment" class="%behat.environment.class%" scope="prototype">
-            <argument>%behat.mink.start_url%</argument>
-            <argument type="service" id="behat.mink" />
+        <service id="behat.context_dispatcher" class="%behat.context_dispatcher.class%">
+            <argument>%behat.context.class%</argument>
             <argument type="service" id="kernel" />
         </service>
-
     </services>
 </container>

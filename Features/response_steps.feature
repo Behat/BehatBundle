@@ -50,11 +50,11 @@ Feature: Response Steps
       (::) failed steps (::)
 
       01. Failed asserting that <text> does not match PCRE pattern "/Page N34/".
-          In step `And I should not see "Page N34"'. # Behat/Mink/Integration/steps/mink_steps.php:66
+          In step `And I should not see "Page N34"'. # Behat\Mink\Behat\Context\PageContext::assertPageNotContains()
           From scenario `I should not see'.          # features/response.feature:22
 
       02. element with locator: "//ul/li/a/p" not found
-          In step `And I should see "//ul/li/a/p" element'. # Behat/Mink/Integration/steps/mink_steps.php:141
+          In step `And I should see "//ul/li/a/p" element'. # Behat\Mink\Behat\Context\PageContext::assertElementOnPage()
           From scenario `I should see element'.             # features/response.feature:28
 
       5 scenarios (3 passed, 2 failed)

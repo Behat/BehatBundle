@@ -39,7 +39,7 @@ Feature: Browser Steps
       (::) failed steps (::)
 
       01. link with locator: "p100" not found
-          In step `When I follow "p100"'.         # Behat/Mink/Integration/steps/mink_steps.php:27
+          In step `When I follow "p100"'.         # Behat\Mink\Behat\Context\FormContext::clickLink()
           From scenario `Unexistent link follow'. # features/browser.feature:18
 
       3 scenarios (2 passed, 1 failed)
@@ -71,7 +71,7 @@ Feature: Browser Steps
       (::) failed steps (::)
 
       01. Failed asserting that <text> matches PCRE pattern "/Page N1/".
-          In step `Then I should see "Page N1"'. # Behat/Mink/Integration/steps/mink_steps.php:62
+          In step `Then I should see "Page N1"'. # Behat\Mink\Behat\Context\PageContext::assertPageContains()
           From scenario ***.                     # features/redirect.feature:7
 
       2 scenarios (1 passed, 1 failed)

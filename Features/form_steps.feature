@@ -6,7 +6,6 @@ Feature: Form Steps
   Background:
     Given basic BehatBundle environment
 
-  @javascript
   Scenario: Simple Browsing
     Given a feature named "form.feature" with:
       """
@@ -16,6 +15,7 @@ Feature: Form Steps
         Background:
           Given I am on /_behat/tests/form
 
+        @javascript
         Scenario: Simple Form Send
           Given I fill in "name" with "ever"
           And I fill in "age" with "23"

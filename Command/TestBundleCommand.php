@@ -13,7 +13,7 @@ use Behat\Behat\Console\Command\BehatCommand,
     Behat\Behat\PathLocator;
 
 /*
- * This file is part of the BehatBundle.
+ * This file is part of the Behat\BehatBundle.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
