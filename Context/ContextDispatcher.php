@@ -22,12 +22,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 class ContextDispatcher extends BaseDispatcher
 {
     /**
-     * Context class name.
-     *
-     * @var     string
-     */
-    private $contextClassName;
-    /**
      * Symfony2 kernel instance.
      *
      * @var     Symfony\Component\HttpKernel\HttpKernelInterface
@@ -37,26 +31,13 @@ class ContextDispatcher extends BaseDispatcher
     /**
      * Initialize dispatcher.
      *
-     * @param   string                                              $contextClassName   context class name
-     * @param   Symfony\Component\HttpKernel\HttpKernelInterface    $kernel             application kernel
+     * @param   string                                              $className  context class name
+     * @param   Symfony\Component\HttpKernel\HttpKernelInterface    $kernel     application kernel
      */
-    public function __construct($contextClassName, HttpKernelInterface $kernel)
+    public function __construct($className, HttpKernelInterface $kernel)
     {
-        $this->contextClassName = $contextClassName;
-        $this->kernel           = $kernel;
-
-        if (!class_exists($this->contextClassName)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Context class "%s" not found', $this->contextClassName
-            ));
-        }
-
-        $contextClassRefl = new \ReflectionClass($contextClassName);
-        if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\ContextInterface')) {
-            throw new \InvalidArgumentException(sprintf(
-                'Context class "%s" should implement ContextInterface', $this->contextClassName
-            ));
-        }
+        $this->setContextClass($className);
+        $this->kernel = $kernel;
     }
 
     /**
@@ -66,6 +47,8 @@ class ContextDispatcher extends BaseDispatcher
      */
     public function createContext()
     {
-        return new $this->contextClassName($this->kernel);
+        $class = $this->getContextClass();
+
+        return new $class($this->kernel);
     }
 }
