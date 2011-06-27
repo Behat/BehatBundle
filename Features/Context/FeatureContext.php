@@ -70,11 +70,8 @@ class FeatureContext extends BehatContext
         $this->command = str_replace('%features_path%', $this->path, $command);
 
         // Execute command
-        exec($this->command, $this->output, $this->return);
+        exec($this->command . ' --env test', $this->output, $this->return);
         $this->output = trim(implode("\n", $this->output));
-        $this->output = str_replace(
-            $this->getKernel()->getContainer()->getParameter('mink.paths.lib') . '/src/', '', $this->output
-        );
     }
 
     /**
