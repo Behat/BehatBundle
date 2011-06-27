@@ -120,4 +120,98 @@ class TestBundleCommand extends BehatCommand
 
         return $bundlePath;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initFeaturesDirectoryStructure(PathLocator $locator, OutputInterface $output)
+    {
+        $basePath     = realpath($locator->getWorkPath()) . DIRECTORY_SEPARATOR;
+        $featuresPath = $locator->getFeaturesPath();
+        $contextPath  = $featuresPath . DIRECTORY_SEPARATOR . 'Context';
+
+        $namespace  = '';
+        $bundlePath = dirname($featuresPath);
+        $container  = $this->getApplication()->getKernel()->getContainer();
+        foreach ($container->get('kernel')->getBundles() as $bundle) {
+            if (false !== strpos($bundlePath, $bundle->getPath())) {
+                $tmp = str_replace('\\', '/', get_class($bundle));
+                $namespace = str_replace('/', '\\', dirname($tmp));
+                break;
+            }
+        }
+
+        if (!is_dir($featuresPath)) {
+            mkdir($featuresPath, 0777, true);
+            $output->writeln(
+                '<info>+d</info> ' .
+                str_replace($basePath, '', realpath($featuresPath)) .
+                ' <comment>- place your *.feature files here</comment>'
+            );
+        }
+
+        if (!is_dir($contextPath)) {
+            mkdir($contextPath, 0777, true);
+
+            file_put_contents(
+                $contextPath . DIRECTORY_SEPARATOR . 'FeatureContext.php',
+                strtr($this->getFeatureContextSkelet(), array(
+                    '%NAMESPACE%' => $namespace
+                ))
+            );
+
+            $output->writeln(
+                '<info>+f</info> ' .
+                str_replace($basePath, '', realpath($contextPath)) . DIRECTORY_SEPARATOR .
+                'FeatureContext.php <comment>- place your feature related code here</comment>'
+            );
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFeatureContextSkelet()
+    {
+return <<<'PHP'
+<?php
+
+namespace %NAMESPACE%\Features\Context;
+
+use Behat\BehatBundle\Context\BehatContext,
+    Behat\BehatBundle\Context\MinkContext;
+use Behat\Behat\Context\ClosuredContextInterface,
+    Behat\Behat\Context\TranslatedContextInterface,
+    Behat\Behat\Exception\Pending;
+use Behat\Gherkin\Node\PyStringNode,
+    Behat\Gherkin\Node\TableNode;
+
+//
+// Require 3rd-party libraries here:
+//
+//   require_once 'PHPUnit/Autoload.php';
+//   require_once 'PHPUnit/Framework/Assert/Functions.php';
+//
+
+/**
+ * Feature context.
+ */
+class FeatureContext extends BehatContext //MinkContext if you want to test web
+{
+//
+// Place your definition and hook methods here:
+//
+//    /**
+//     * @Given /^I have done something with "([^"]*)"$/
+//     */
+//    public function iHaveDoneSomethingWith($argument)
+//    {
+//        $contianer = $this->getContainer();
+//        $container->get('some_service')->doSomethingWith($argument);
+//    }
+//
+}
+
+PHP;
+    }
 }
