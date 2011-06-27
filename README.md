@@ -11,12 +11,6 @@ See [Behat official site](http://behat.org) for more info.
 
 ## Installation
 
-### Install Behat\MinkBundle
-
-BehatBundle uses MinkBundle internally to run features against different browser emulators.
-
-So, you **need to install `Behat\MinkBundle` first**, as described [here](https://github.com/Behat/MinkBundle#readme).
-
 ### Add Behat\BehatBundle to your src dir.
 
 If you're on PR# release:
@@ -54,10 +48,6 @@ $loader->registerNamespaces(array(
 if (in_array($this->getEnvironment(), array('dev', 'test'))) {
     ...
     $bundles[] = new Behat\BehatBundle\BehatBundle();
-
-    // include PHPUnit assertions
-    require_once 'PHPUnit/Autoload.php';
-    require_once 'PHPUnit/Framework/Assert/Functions.php';
     ...
 }
 ```
@@ -69,42 +59,45 @@ if (in_array($this->getEnvironment(), array('dev', 'test'))) {
 behat: ~
 ```
 
-### Configuration parameters
+## Init bundle features suite
 
-BehatBundle supports almost all parameters, that `behat` itself support (exluding profiles and imports). Read [Behat configuration documentation](http://docs.behat.org/en/behat/configuration.html).
+Create your bundle and run:
 
-### Where to place features
+``` bash
+app/console behat:test:bundle --init Acme\\YourBundle
+```
 
-Behat will search for next foleder structure (when running bundle features):
+this will create next structure:
 
-    path/to/your/BundleBundleBundle
+    path/to/Acme/YourBundle
     ├── Features
     │   ├── feature1.feature
     │   ├── feature2.feature
     │   ├── feature3.feature
-    │   ├── support
-    │   │   ├── bootstrap.php
-    │   │   ├── env.php
-    │   │   └── hooks.php
-    │   └── steps
-    │       └── your_steps.php
+    │   └── Context
+    │       └── FeatureContext.php
     ├── ...
     └── ...
 
-Notice, that from Symfony2 PR12, BehatBundle stores features in `/path/to/BundleBundleBundle/Features`, not in `/path/to/BundleBundleBundle/Tests/Features`. This was done, because Behat features is more than simple tests and it should be used for bundle/project architect, not just for tests.
+If you look closely at `path/to/Acme/YourBundle/Features/Context/FeatureContext.php`, you'll see, that it extends base `BehatContext`, which comes with `BehatBundle` and just gives you ability to get applications kernel or container.
 
-### Core steps
+If you want to test web interface of your application with Mink:
 
-BehatBundle and MinkBundle comes bundled with core steps. Find all available steps with:
+1. Install Mink [here](https://github.com/Behat/MinkBundle#readme).
+2. Extend `MinkContext` instead of basic `BehatContext` in your `FeatureContext` class.
+
+## Check available step definitions
+
+If you extended your `FeatureContext` from `MinkContext`, then you could use one of the predefined web steps. You can check all available for specific context (bundle) definitions with:
 
 ``` bash
-app/console behat:test:bundle Your\\Bundle\\Namespace --steps
+app/console behat:test:bundle Your\\Bundle\\Namespace --definitions
 ```
 
-or even in your language (if MinkBundle steps support it):
+or even in your language:
 
 ``` bash
-app/console behat:test:bundle Your\\Bundle\\Namespace --steps --lang fr
+app/console behat:test:bundle Your\\Bundle\\Namespace --definitions --lang fr
 ```
 
 ## Command line
@@ -136,16 +129,6 @@ All features inside `src/Application/HelloBundle/Tests/Features` folder:
 Single scenario on line 21 in specified feature:
 
     php app/console behat:test:path src/Application/HelloBundle/Tests/Features/SingleFeature.feature:21
-
-### Options
-
-BehatBundle supports almost all options, that Behat itself supports, including:
-
-- `--format` or `-f`: switch formatter (default ones is *progress* & *pretty*)
-- `--no-colors`: turn-off colors in formatter
-- `--lang ...`: output formatter locale
-- `--name ...`: filter features/scenarios by name
-- `--tags ...`: filter features/scenarios by tag
 
 ## CREDITS
 
