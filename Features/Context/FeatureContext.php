@@ -1,5 +1,7 @@
 <?php
 
+namespace Behat\BehatBundle\Features\Context;
+
 use Behat\BehatBundle\Context\BehatContext;
 
 use Behat\Gherkin\Node\PyStringNode,
@@ -89,9 +91,9 @@ class FeatureContext extends BehatContext
 
         try {
             assertEquals((string) $data, $realData);
-        } catch (Exception $e) {
-            $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
-            throw new Exception($diff, $e->getCode(), $e);
+        } catch (\Exception $e) {
+            $diff = \PHPUnit_Framework_TestFailure::exceptionToString($e);
+            throw new \Exception($diff, $e->getCode(), $e);
         }
     }
 

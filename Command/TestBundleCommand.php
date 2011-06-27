@@ -72,6 +72,23 @@ class TestBundleCommand extends BehatCommand
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getContextClass(InputInterface $input, ContainerInterface $container)
+    {
+        if (!preg_match('/Bundle$/', $namespace = $input->getArgument('namespace'))) {
+            throw new \InvalidArgumentException('The namespace must end with Bundle.');
+        }
+
+        $namespacedContext = $namespace . '\Features\Context\FeatureContext';
+        if (class_exists($namespacedContext)) {
+            return $namespacedContext;
+        }
+
+        return $container->getParameter('behat.context.class');
+    }
+
+    /**
      * Locate current bundle path.
      *
      * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance

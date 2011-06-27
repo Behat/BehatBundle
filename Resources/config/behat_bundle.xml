@@ -7,7 +7,6 @@
     </parameters>
     <services>
         <service id="behat.context_dispatcher" class="%behat.context_dispatcher.class%">
-            <argument>%behat.context.class%</argument>
             <argument type="service" id="kernel" />
         </service>
     </services>

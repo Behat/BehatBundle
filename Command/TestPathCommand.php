@@ -55,4 +55,25 @@ class TestPathCommand extends BehatCommand
     {
         return $this->getApplication()->getKernel()->getContainer();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getContextClass(InputInterface $input, ContainerInterface $container)
+    {
+        $namespacedContext = null;
+        foreach ($container->get('kernel')->getBundles() as $bundle) {
+            if (false !== strpos(realpath($input->getArgument('features')), $bundle->getPath())) {
+                $namespace = str_replace('/', '\\', dirname(str_replace('\\', '/', get_class($bundle))));
+                $namespacedContext = $namespace . '\Features\Context\FeatureContext';
+                break;
+            }
+        }
+
+        if (null !== $namespacedContext && class_exists($namespacedContext)) {
+            return $namespacedContext;
+        }
+
+        return $container->getParameter('behat.context.class');
+    }
 }

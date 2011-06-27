@@ -31,12 +31,10 @@ class ContextDispatcher extends BaseDispatcher
     /**
      * Initialize dispatcher.
      *
-     * @param   string                                              $className  context class name
      * @param   Symfony\Component\HttpKernel\HttpKernelInterface    $kernel     application kernel
      */
-    public function __construct($className, HttpKernelInterface $kernel)
+    public function __construct(HttpKernelInterface $kernel)
     {
-        $this->setContextClass($className);
         $this->kernel = $kernel;
     }
 
