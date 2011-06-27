@@ -83,7 +83,7 @@ If you look closely at `path/to/Acme/YourBundle/Features/Context/FeatureContext.
 
 If you want to test web interface of your application with Mink:
 
-1. Install Mink [here](https://github.com/Behat/MinkBundle#readme).
+1. Install MinkBundle and Mink as [described here](https://github.com/Behat/MinkBundle#readme).
 2. Extend `MinkContext` instead of basic `BehatContext` in your `FeatureContext` class.
 
 ## Check available step definitions
