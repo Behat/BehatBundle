@@ -61,9 +61,11 @@ class TestPathCommand extends BehatCommand
      */
     protected function getContextClass(InputInterface $input, ContainerInterface $container)
     {
+        $featuresPath = explode(':', $input->getArgument('features'));
+
         $namespacedContext = null;
         foreach ($container->get('kernel')->getBundles() as $bundle) {
-            if (false !== strpos(realpath($input->getArgument('features')), $bundle->getPath())) {
+            if (false !== strpos(realpath($featuresPath[0]), realpath($bundle->getPath()))) {
                 $namespace = str_replace('/', '\\', dirname(str_replace('\\', '/', get_class($bundle))));
                 $namespacedContext = $namespace . '\Features\Context\FeatureContext';
                 break;
