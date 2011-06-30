@@ -70,8 +70,8 @@ Feature: Browser Steps
 
       (::) failed steps (::)
 
-      01. Failed asserting that <text> matches PCRE pattern "/Page N1/".
-          In step `Then I should see "Page N1"'. # Behat\Mink\Behat\Context\PageContext::assertPageContains()
+      01. Failed asserting that <string:page Page N2 p10 p0 p22 > matches PCRE pattern "/Page N1/".
+          In step `Then I should see "Page N1"'. # Behat\Mink\Behat\Context\PageContext::assertPageContainsText()
           From scenario ***.                     # features/redirect.feature:7
 
       2 scenarios (1 passed, 1 failed)
