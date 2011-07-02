@@ -42,7 +42,7 @@ Feature: Response Steps
           Then I should see "ul > li > a" element
           And I should see "ul > li > a > p" element
       """
-    When I run "./console behat:test:path %features_path%/response.feature -f progress --no-colors --no-time"
+    When I run "./console behat:path %features_path%/response.feature -f progress --no-colors --no-time"
     Then It should fail with:
       """
       ................F....F

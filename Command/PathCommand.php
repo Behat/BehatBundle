@@ -19,11 +19,11 @@ use Behat\Behat\Console\Command\BehatCommand;
  */
 
 /**
- * Bundle Test Command.
+ * Path testing command.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TestPathCommand extends BehatCommand
+class PathCommand extends BehatCommand
 {
     /**
      * {@inheritdoc}
@@ -31,7 +31,7 @@ class TestPathCommand extends BehatCommand
     protected function configure()
     {
         $this
-            ->setName('behat:test:path')
+            ->setName('behat:path')
             ->setDescription('Tests specified feature(s)')
             ->setDefinition(array_merge(
                 array(

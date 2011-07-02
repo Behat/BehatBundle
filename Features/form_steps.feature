@@ -24,7 +24,7 @@ Feature: Form Steps
           Then I should see "POST recieved"
           And I should see "ever is 23 years old programmer"
       """
-    When I run "./console behat:test:path %features_path%/form.feature -f progress --no-colors --no-time"
+    When I run "./console behat:path %features_path%/form.feature -f progress --no-colors --no-time"
     Then It should pass with:
       """
       .......

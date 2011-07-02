@@ -21,12 +21,13 @@ use Behat\Behat\Console\Command\BehatCommand,
  */
 
 /**
- * Bundle Test Command.
+ * Bundle testing command.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TestBundleCommand extends BehatCommand
+class BundleCommand extends BehatCommand
 {
+    private $namespace;
     private $bundlePath;
 
     /**
@@ -35,7 +36,7 @@ class TestBundleCommand extends BehatCommand
     protected function configure()
     {
         $this
-            ->setName('behat:test:bundle')
+            ->setName('behat:bundle')
             ->setDescription('Tests specified bundle features')
             ->setDefinition(array_merge(
                 array(
@@ -76,10 +77,7 @@ class TestBundleCommand extends BehatCommand
      */
     protected function getContextClass(InputInterface $input, ContainerInterface $container)
     {
-        if (!preg_match('/Bundle$/', $namespace = $input->getArgument('namespace'))) {
-            throw new \InvalidArgumentException('The namespace must end with Bundle.');
-        }
-
+        $namespace         = $this->getNamespace($input);
         $namespacedContext = $namespace . '\Features\Context\FeatureContext';
         if (class_exists($namespacedContext)) {
             return $namespacedContext;
@@ -98,10 +96,7 @@ class TestBundleCommand extends BehatCommand
      */
     protected function locateBundlePath(InputInterface $input, ContainerInterface $container)
     {
-        if (!preg_match('/Bundle$/', $namespace = $input->getArgument('namespace'))) {
-            throw new \InvalidArgumentException('The namespace must end with Bundle.');
-        }
-
+        $namespace  = $this->getNamespace($input);
         $bundlePath = null;
         foreach ($container->get('kernel')->getBundles() as $bundle) {
             $tmp = str_replace('\\', '/', get_class($bundle));
@@ -166,6 +161,29 @@ class TestBundleCommand extends BehatCommand
                 'FeatureContext.php <comment>- place your feature related code here</comment>'
             );
         }
+    }
+
+    /**
+     * Returns namespace out of input.
+     *
+     * @param   Symfony\Component\Console\Input\InputInterface  $input
+     *
+     * @return  string
+     */
+    protected function getNamespace(InputInterface $input)
+    {
+        if (null === $this->namespace) {
+            $namespace = str_replace('/', '\\', $input->getArgument('namespace'));
+            if (false === strpos($namespace, '\\')) {
+                $bundle    = $this->getApplication()->getKernel()->getBundle($namespace);
+                $namespace = $bundle->getNamespace();
+            } elseif (!preg_match('/Bundle$/', $namespace)) {
+                throw new \InvalidArgumentException('The namespace must end with Bundle.');
+            }
+            $this->namespace = $namespace;
+        }
+
+        return $this->namespace;
     }
 
     /**
