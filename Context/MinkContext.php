@@ -48,10 +48,6 @@ class MinkContext extends BaseContext
             self::$mink = $this->getContainer()->get('behat.mink');
             $this->registerSessions(self::$mink);
         }
-
-        foreach ($this->getStepsContexts() as $context) {
-            $this->useContext($context);
-        }
     }
 
     /**

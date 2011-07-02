@@ -13,32 +13,32 @@ Feature: Response Steps
         Basic Response Steps
 
         Background:
-          Given I am on /_behat/tests/page/page1
+          Given I am on "/_behat/tests/page/page1"
 
         Scenario: 200 Status Code
           Given I should see "Page N1"
-          When I go to /_behat/tests/page/page2
+          When I go to "/_behat/tests/page/page2"
           Then the response status code should be 200
 
         Scenario: 404 Status Code
           Given I should see "Page N1"
-          When I go to /_behat/tests/UNKNOWN
+          When I go to "/_behat/tests/UNKNOWN"
           Then the response status code should be 404
 
         Scenario: I should see
           Given I should see "Page N1"
-          When I go to /_behat/tests/page/page34
+          When I go to "/_behat/tests/page/page34"
           Then I should see "Page N34"
 
         Scenario: I should not see
           Given I should not see "Page N34"
-          When I go to /_behat/tests/page/page34
+          When I go to "/_behat/tests/page/page34"
           Then I should not see "Page N1"
           And I should not see "Page N34"
 
         Scenario: I should see element
           Given I should not see "Page N34"
-          When I go to /_behat/tests/page/page34
+          When I go to "/_behat/tests/page/page34"
           Then I should see "ul > li > a" element
           And I should see "ul > li > a > p" element
       """
@@ -50,11 +50,11 @@ Feature: Response Steps
       (::) failed steps (::)
 
       01. Failed asserting that <string:page Page N34 p10 p0 p22 > does not match PCRE pattern "/Page N34/".
-          In step `And I should not see "Page N34"'. # Behat\Mink\Behat\Context\PageContext::assertPageNotContainsText()
+          In step `And I should not see "Page N34"'. # FeatureContext::assertPageNotContainsText()
           From scenario `I should not see'.          # features/response.feature:22
 
       02. element with locator: "ul > li > a > p" not found
-          In step `And I should see "ul > li > a > p" element'. # Behat\Mink\Behat\Context\PageContext::assertElementOnPage()
+          In step `And I should see "ul > li > a > p" element'. # FeatureContext::assertElementOnPage()
           From scenario `I should see element'.                 # features/response.feature:28
 
       5 scenarios (3 passed, 2 failed)

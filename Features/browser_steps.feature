@@ -13,11 +13,11 @@ Feature: Browser Steps
         Basic Browser Steps
 
         Background:
-          Given I am on /_behat/tests/page/page1
+          Given I am on "/_behat/tests/page/page1"
 
         Scenario: I am on/I go to
           Given I should see "Page N1"
-          When I go to /_behat/tests/page/page2
+          When I go to "/_behat/tests/page/page2"
           Then I should see "Page N2"
           And I should not see "Page N1"
 
@@ -39,7 +39,7 @@ Feature: Browser Steps
       (::) failed steps (::)
 
       01. link with locator: "p100" not found
-          In step `When I follow "p100"'.         # Behat\Mink\Behat\Context\FormContext::clickLink()
+          In step `When I follow "p100"'.         # FeatureContext::clickLink()
           From scenario `Unexistent link follow'. # features/browser.feature:18
 
       3 scenarios (2 passed, 1 failed)
@@ -53,14 +53,14 @@ Feature: Browser Steps
         Redirection scenarios
 
         Background:
-          Given I am on /_behat/tests/page/page1
+          Given I am on "/_behat/tests/page/page1"
 
         Scenario:
-          Given I go to /_behat/tests/page/page2
+          Given I go to "/_behat/tests/page/page2"
           Then I should see "Page N1"
 
         Scenario:
-          Given I go to /_behat/tests/redirect
+          Given I go to "/_behat/tests/redirect"
           Then I should see "Page N1"
       """
     When I run "./console behat:test:path %features_path%/redirect.feature -f progress --no-colors --no-time"
@@ -71,9 +71,9 @@ Feature: Browser Steps
       (::) failed steps (::)
 
       01. Failed asserting that <string:page Page N2 p10 p0 p22 > matches PCRE pattern "/Page N1/".
-          In step `Then I should see "Page N1"'. # Behat\Mink\Behat\Context\PageContext::assertPageContainsText()
+          In step `Then I should see "Page N1"'. # FeatureContext::assertPageContainsText()
           From scenario ***.                     # features/redirect.feature:7
 
       2 scenarios (1 passed, 1 failed)
       6 steps (5 passed, 1 failed)
-      """      
+      """

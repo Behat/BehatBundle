@@ -13,7 +13,7 @@ Feature: Form Steps
         Basic Response Steps
 
         Background:
-          Given I am on /_behat/tests/form
+          Given I am on "/_behat/tests/form"
 
         @javascript
         Scenario: Simple Form Send
@@ -28,7 +28,7 @@ Feature: Form Steps
     Then It should pass with:
       """
       .......
-      
+
       1 scenario (1 passed)
       7 steps (7 passed)
       """
