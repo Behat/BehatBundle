@@ -2,13 +2,12 @@
 
 namespace Behat\BehatBundle\Command;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputOption;
 
-use Behat\Behat\Console\Command\BehatCommand;
+use Behat\Behat\Console\Processor;
+
+use Behat\BehatBundle\Console\Processor as BundleProcessor;
 
 /*
  * This file is part of the Behat\BehatBundle.
@@ -23,13 +22,22 @@ use Behat\Behat\Console\Command\BehatCommand;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PathCommand extends BehatCommand
+class PathCommand extends BundleCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        $this->setProcessors(array(
+            new Processor\LocatorProcessor(),
+            new BundleProcessor\PathContextProcessor(),
+            new Processor\FormatProcessor(),
+            new Processor\HelpProcessor(),
+            new Processor\GherkinProcessor(),
+            new Processor\RerunProcessor(),
+        ));
+
         $this
             ->setName('behat:path')
             ->setDescription('Tests specified feature(s)')
@@ -40,42 +48,15 @@ class PathCommand extends BehatCommand
                         'The features path'
                     ),
                 ),
-                $this->getDemonstrationOptions(),
-                $this->getFilterOptions(),
-                $this->getFormatterOptions(),
-                $this->getRunOptions()
+                $this->getProcessorsInputOptions(),
+                array(
+                    new InputOption('--strict',         null,
+                        InputOption::VALUE_NONE,
+                        '       ' .
+                        'Fail if there are any undefined or pending steps.'
+                    )
+                )
             ))
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function createContainer($configFile = null, $profile = null)
-    {
-        return $this->getApplication()->getKernel()->getContainer();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getContextClass(InputInterface $input, ContainerInterface $container)
-    {
-        $featuresPath = explode(':', $input->getArgument('features'));
-
-        $namespacedContext = null;
-        foreach ($container->get('kernel')->getBundles() as $bundle) {
-            if (false !== strpos(realpath($featuresPath[0]), realpath($bundle->getPath()))) {
-                $namespace = str_replace('/', '\\', dirname(str_replace('\\', '/', get_class($bundle))));
-                $namespacedContext = $namespace . '\Features\Context\FeatureContext';
-                break;
-            }
-        }
-
-        if (null !== $namespacedContext && class_exists($namespacedContext)) {
-            return $namespacedContext;
-        }
-
-        return $container->getParameter('behat.context.class');
     }
 }
