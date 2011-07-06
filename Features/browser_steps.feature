@@ -38,7 +38,7 @@ Feature: Browser Steps
 
       (::) failed steps (::)
 
-      01. link with locator: "p100" not found
+      01. Link with locator "p100" not found
           In step `When I follow "p100"'.         # FeatureContext::clickLink()
           From scenario `Unexistent link follow'. # features/browser.feature:18
 
@@ -70,7 +70,7 @@ Feature: Browser Steps
 
       (::) failed steps (::)
 
-      01. Failed asserting that <string:page Page N2 p10 p0 p22 > matches PCRE pattern "/Page N1/".
+      01. There is no "Page N1" text
           In step `Then I should see "Page N1"'. # FeatureContext::assertPageContainsText()
           From scenario ***.                     # features/redirect.feature:7
 

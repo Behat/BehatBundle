@@ -30,35 +30,27 @@ class BundleCommand extends BehatCommand
      */
     protected function configure()
     {
-        $this->setProcessors(array(
-            new BundleProcessor\LocatorProcessor(),
-            new BundleProcessor\InitProcessor(),
-            new BundleProcessor\BundleContextProcessor(),
-            new Processor\FormatProcessor(),
-            new Processor\HelpProcessor(),
-            new Processor\GherkinProcessor(),
-            new Processor\RerunProcessor(),
-        ));
-
         $this
             ->setName('behat:bundle')
             ->setDescription('Tests specified bundle features')
-            ->setDefinition(array_merge(
-                array(
-                    new InputArgument('namespace',
-                        InputArgument::REQUIRED,
-                        'The bundle namespace'
-                    ),
-                ),
-                $this->getProcessorsInputOptions(),
-                array(
-                    new InputOption('--strict',         null,
-                        InputOption::VALUE_NONE,
-                        '       ' .
-                        'Fail if there are any undefined or pending steps.'
-                    )
-                )
+            ->setProcessors(array(
+                new BundleProcessor\LocatorProcessor(),
+                new BundleProcessor\InitProcessor(),
+                new BundleProcessor\BundleContextProcessor(),
+                new Processor\FormatProcessor(),
+                new Processor\HelpProcessor(),
+                new Processor\GherkinProcessor(),
+                new Processor\RerunProcessor(),
             ))
+            ->addArgument('namespace', InputArgument::REQUIRED,
+                'The bundle namespace. Could be a full namespace (<comment>Acme\\DemoBundle</comment>), ' .
+                'reversed namespace (<comment>Acme/DemoBundle</comment>) or just a bundle name ' .
+                '(<comment>AcmeDemoBundle</comment>).'
+            )
+            ->configureProcessors()
+            ->addOption('--strict', null, InputOption::VALUE_NONE,
+                'Fail if there are any undefined or pending steps.'
+            )
         ;
     }
 

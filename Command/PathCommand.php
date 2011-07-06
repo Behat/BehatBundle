@@ -29,34 +29,26 @@ class PathCommand extends BundleCommand
      */
     protected function configure()
     {
-        $this->setProcessors(array(
-            new Processor\LocatorProcessor(),
-            new BundleProcessor\PathContextProcessor(),
-            new Processor\FormatProcessor(),
-            new Processor\HelpProcessor(),
-            new Processor\GherkinProcessor(),
-            new Processor\RerunProcessor(),
-        ));
-
         $this
             ->setName('behat:path')
             ->setDescription('Tests specified feature(s)')
-            ->setDefinition(array_merge(
-                array(
-                    new InputArgument('features',
-                        InputArgument::REQUIRED,
-                        'The features path'
-                    ),
-                ),
-                $this->getProcessorsInputOptions(),
-                array(
-                    new InputOption('--strict',         null,
-                        InputOption::VALUE_NONE,
-                        '       ' .
-                        'Fail if there are any undefined or pending steps.'
-                    )
-                )
+            ->setProcessors(array(
+                new Processor\LocatorProcessor(),
+                new BundleProcessor\PathContextProcessor(),
+                new Processor\FormatProcessor(),
+                new Processor\HelpProcessor(),
+                new Processor\GherkinProcessor(),
+                new Processor\RerunProcessor(),
             ))
+            ->addArgument('features', InputArgument::REQUIRED,
+                'Feature(s) to run. Could be a dir (<comment>features/</comment>), ' .
+                'a feature (<comment>*.feature</comment>) or a scenario at specific line ' .
+                '(<comment>*.feature:10</comment>).'
+            )
+            ->configureProcessors()
+            ->addOption('--strict', null, InputOption::VALUE_NONE,
+                'Fail if there are any undefined or pending steps.'
+            )
         ;
     }
 }

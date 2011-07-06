@@ -49,11 +49,11 @@ Feature: Response Steps
 
       (::) failed steps (::)
 
-      01. Failed asserting that <string:page Page N34 p10 p0 p22 > does not match PCRE pattern "/Page N34/".
+      01. There is "Page N34" text
           In step `And I should not see "Page N34"'. # FeatureContext::assertPageNotContainsText()
           From scenario `I should not see'.          # features/response.feature:22
 
-      02. element with locator: "ul > li > a > p" not found
+      02. Element with locator "ul > li > a > p" not found
           In step `And I should see "ul > li > a > p" element'. # FeatureContext::assertElementOnPage()
           From scenario `I should see element'.                 # features/response.feature:28
 
