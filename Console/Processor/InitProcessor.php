@@ -2,7 +2,9 @@
 
 namespace Behat\BehatBundle\Console\Processor;
 
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Console\Output\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\PathLocator,
     Behat\Behat\Console\Processor\InitProcessor as BaseProcessor;
@@ -25,15 +27,30 @@ class InitProcessor extends BaseProcessor
     /**
      * {@inheritdoc}
      */
-    protected function initFeaturesDirectoryStructure(PathLocator $locator, OutputInterface $output)
+    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('init')) {
+            $this->initBundleDirectoryStructure($container, $output);
+
+            exit(0);
+        }
+    }
+
+    /**
+     * Inits bundle directory structure
+     *
+     * @param   Symfony\Component\DependencyInjection\ContainerInterface  $container
+     * @param   Symfony\Component\Console\Output\OutputInterface
+     */
+    protected function initBundleDirectoryStructure(ContainerInterface $container, OutputInterface $output)
+    {
+        $locator      = $container->get('behat.path_locator');
         $basePath     = realpath($locator->getWorkPath()).DIRECTORY_SEPARATOR;
         $featuresPath = $locator->getFeaturesPath();
         $contextPath  = $featuresPath.DIRECTORY_SEPARATOR.'Context';
 
         $namespace  = '';
         $bundlePath = dirname($featuresPath);
-        $container  = $this->getApplication()->getKernel()->getContainer();
         foreach ($container->get('kernel')->getBundles() as $bundle) {
             if (false !== strpos($bundlePath, $bundle->getPath())) {
                 $tmp = str_replace('\\', '/', get_class($bundle));
@@ -107,7 +124,7 @@ class FeatureContext extends BehatContext //MinkContext if you want to test web
 //     */
 //    public function iHaveDoneSomethingWith($argument)
 //    {
-//        $contianer = $this->getContainer();
+//        $container = $this->getContainer();
 //        $container->get('some_service')->doSomethingWith($argument);
 //    }
 //
