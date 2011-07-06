@@ -3,7 +3,7 @@
 namespace Behat\BehatBundle\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Console\Output\InputInterface,
+    Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\PathLocator,
