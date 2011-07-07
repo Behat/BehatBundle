@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class MinkContext extends BaseContext
+abstract class MinkContext extends BaseContext
 {
     /**
      * Symfony2 kernel instance.

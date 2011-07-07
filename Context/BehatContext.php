@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BehatContext extends BaseContext
+abstract class BehatContext extends BaseContext
 {
     /**
      * Symfony2 kernel instance.
