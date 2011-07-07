@@ -40,6 +40,8 @@ class BundleNamespaceLocator
      */
     public function findNamespace($bundleName)
     {
+        $bundleName = str_replace('/', '\\', $bundleName);
+
         if (false === strpos($bundleName, '\\')) {
             $bundleName = $this->kernel->getBundle($bundleName)->getNamespace();
         } elseif (!preg_match('/Bundle$/', $bundleName)) {
