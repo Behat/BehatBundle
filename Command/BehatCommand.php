@@ -32,7 +32,7 @@ class BehatCommand extends BaseCommand
     {
         $this
             ->setName('behat')
-            ->setDescription('Tests specified feature(s) or bundles')
+            ->setDescription('Tests Behat feature(s) in specified bundle')
             ->setProcessors(array(
                 new BundleProcessor\LocatorProcessor(),
                 new BundleProcessor\InitProcessor(),
@@ -42,6 +42,7 @@ class BehatCommand extends BaseCommand
                 new Processor\GherkinProcessor(),
                 new Processor\RerunProcessor(),
             ))
+            ->setDefinition(new \Behat\Behat\Console\Input\InputDefinition())
             ->addArgument('features', InputArgument::REQUIRED,
                 "Feature(s) to run. Could be:".
                 "\n- a dir (<comment>src/to/Bundle/Features/</comment>), " .
