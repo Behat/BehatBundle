@@ -30,7 +30,7 @@ class InitProcessor extends BaseProcessor
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
         if ($input->getOption('init')) {
-            $this->initBundleDirectoryStructure($container, $output);
+            $this->initBundleDirectoryStructure($container, $input, $output);
 
             exit(0);
         }
@@ -39,17 +39,29 @@ class InitProcessor extends BaseProcessor
     /**
      * Inits bundle directory structure
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface  $container
-     * @param   Symfony\Component\Console\Output\OutputInterface
+     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container
+     * @param   Symfony\Component\Console\Input\InputInterface              $input
+     * @param   Symfony\Component\Console\Output\OutputInterface            $output
      */
-    protected function initBundleDirectoryStructure(ContainerInterface $container, OutputInterface $output)
+    protected function initBundleDirectoryStructure(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
+        $bundlePath  = preg_replace('/Bundle[\/\\\\]Features.*$/', 'Bundle', $input->getArgument('features'));
+        $bundleFound = false;
+        foreach ($container->get('kernel')->getBundles() as $bundle) {
+            if (realpath($bundle->getPath()) === realpath($bundlePath)) {
+                $bundleFound = true;
+                break;
+            }
+        }
+        if (!$bundleFound) {
+            throw new \InvalidArgumentException(
+                sprintf('Can not find bundle at path "%s". Have you enabled it?', $bundlePath)
+            );
+        }
+
+        $featuresPath = $bundlePath.DIRECTORY_SEPARATOR.'Features';
         $locator      = $container->get('behat.path_locator');
         $basePath     = realpath($locator->getWorkPath()).DIRECTORY_SEPARATOR;
-        $featuresPath = $locator->getFeaturesPath();
-        if (!preg_match('/Features$/i', $featuresPath)) {
-            $featuresPath = $featuresPath.DIRECTORY_SEPARATOR.'Features';
-        }
         $contextPath  = $featuresPath.DIRECTORY_SEPARATOR.'Context';
 
         $namespace  = '';
