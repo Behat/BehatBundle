@@ -39,8 +39,8 @@ Feature: Response Steps
         Scenario: I should see element
           Given I should not see "Page N34"
           When I go to "/_behat/tests/page/page34"
-          Then I should see "ul > li > a" element
-          And I should see "ul > li > a > p" element
+          Then I should see an "ul > li > a" element
+          And I should see a "ul > li > a > p" element
       """
     When I run "./console behat:path %features_path%/response.feature -f progress --no-colors --no-time"
     Then It should fail with:
@@ -49,13 +49,13 @@ Feature: Response Steps
 
       (::) failed steps (::)
 
-      01. There is "Page N34" text
+      01. The text "Page N34" appears in the text of this page, but it should not.
           In step `And I should not see "Page N34"'. # FeatureContext::assertPageNotContainsText()
           From scenario `I should not see'.          # features/response.feature:22
 
-      02. Element with locator "ul > li > a > p" not found
-          In step `And I should see "ul > li > a > p" element'. # FeatureContext::assertElementOnPage()
-          From scenario `I should see element'.                 # features/response.feature:28
+      02. Element matching css "ul > li > a > p" not found
+          In step `And I should see a "ul > li > a > p" element'. # FeatureContext::assertElementOnPage()
+          From scenario `I should see element'.                   # features/response.feature:28
 
       5 scenarios (3 passed, 2 failed)
       22 steps (20 passed, 2 failed)
