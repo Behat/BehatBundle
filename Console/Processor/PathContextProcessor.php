@@ -27,12 +27,12 @@ class PathContextProcessor extends BundleContextProcessor
     {
         $featuresPath = $input->getArgument('features');
         if (preg_match('/^(.*)\:\d+$/', $featuresPath, $matches)) {
-            $featuresPath = isset($matches[1]) ? $matches[1] : null;
+            $featuresPath = $matches[1];
         }
 
         $namespacedContext = null;
         foreach ($container->get('kernel')->getBundles() as $bundle) {
-            if (false !== strpos(realpath($featuresPath[0]), realpath($bundle->getPath()))) {
+            if (false !== strpos(realpath($featuresPath), realpath($bundle->getPath()))) {
                 $namespace = str_replace('/', '\\', dirname(str_replace('\\', '/', get_class($bundle))));
                 $namespacedContext = $namespace . '\Features\Context\FeatureContext';
                 break;
