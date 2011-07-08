@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\BehatBundle\Console\Processor\Bundle;
+namespace Behat\BehatBundle\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputInterface,
@@ -17,7 +17,7 @@ use Behat\Behat\Console\Processor\ContextProcessor as BaseProcessor;
  */
 
 /**
- * Bundle Context processor.
+ * Context processor.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -40,11 +40,22 @@ class ContextProcessor extends BaseProcessor
      */
     protected function getContextClass(ContainerInterface $container, InputInterface $input)
     {
-        $locator           = $container->get('behat_bundle.namespace_locator');
-        $namespace         = $locator->findNamespace($input->getArgument('namespace'));
-        $namespacedContext = $namespace . '\Features\Context\FeatureContext';
+        $featuresPath = preg_replace('/\:\d+$/', '', $input->getArgument('features'));
 
-        if (class_exists($namespacedContext)) {
+        $namespacedContext = null;
+        if (preg_match('/^\@([^\/\\\\]+)(.*)$/', $featuresPath, $matches)) {
+            $bundle = $container->get('kernel')->getBundle($matches[1]);
+            $namespacedContext = $bundle->getNamespace() . '\Features\Context\FeatureContext';
+        } else {
+            foreach ($container->get('kernel')->getBundles() as $bundle) {
+                if (false !== strpos(realpath($featuresPath), realpath($bundle->getPath()))) {
+                    $namespacedContext = $bundle->getNamespace() . '\Features\Context\FeatureContext';
+                    break;
+                }
+            }
+        }
+
+        if (null !== $namespacedContext && class_exists($namespacedContext)) {
             return $namespacedContext;
         }
 

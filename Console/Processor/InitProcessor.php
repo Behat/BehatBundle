@@ -47,6 +47,9 @@ class InitProcessor extends BaseProcessor
         $locator      = $container->get('behat.path_locator');
         $basePath     = realpath($locator->getWorkPath()).DIRECTORY_SEPARATOR;
         $featuresPath = $locator->getFeaturesPath();
+        if (!preg_match('/Features$/i', $featuresPath)) {
+            $featuresPath = $featuresPath.DIRECTORY_SEPARATOR.'Features';
+        }
         $contextPath  = $featuresPath.DIRECTORY_SEPARATOR.'Context';
 
         $namespace  = '';

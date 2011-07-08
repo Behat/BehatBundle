@@ -5,7 +5,7 @@ namespace Behat\BehatBundle\Command;
 use Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Input\InputOption;
 
-use Behat\Behat\Console\Command\BehatCommand,
+use Behat\Behat\Console\Command\BehatCommand as BaseCommand,
     Behat\Behat\Console\Processor;
 
 use Behat\BehatBundle\Console\Processor as BundleProcessor;
@@ -19,11 +19,11 @@ use Behat\BehatBundle\Console\Processor as BundleProcessor;
  */
 
 /**
- * Bundle testing command.
+ * Behat testing command.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BundleCommand extends BehatCommand
+class BehatCommand extends BaseCommand
 {
     /**
      * {@inheritdoc}
@@ -31,21 +31,23 @@ class BundleCommand extends BehatCommand
     protected function configure()
     {
         $this
-            ->setName('behat:bundle')
-            ->setDescription('Tests specified bundle features')
+            ->setName('behat')
+            ->setDescription('Tests specified feature(s) or bundles')
             ->setProcessors(array(
-                new BundleProcessor\Bundle\LocatorProcessor(),
+                new BundleProcessor\LocatorProcessor(),
                 new BundleProcessor\InitProcessor(),
-                new BundleProcessor\Bundle\ContextProcessor(),
+                new BundleProcessor\ContextProcessor(),
                 new Processor\FormatProcessor(),
                 new Processor\HelpProcessor(),
                 new Processor\GherkinProcessor(),
                 new Processor\RerunProcessor(),
             ))
-            ->addArgument('namespace', InputArgument::REQUIRED,
-                'The bundle namespace. Could be a full namespace (<comment>Acme\\DemoBundle</comment>), ' .
-                'reversed namespace (<comment>Acme/DemoBundle</comment>) or just a bundle name ' .
-                '(<comment>AcmeDemoBundle</comment>).'
+            ->addArgument('features', InputArgument::REQUIRED,
+                "Feature(s) to run. Could be:".
+                "\n- a dir (<comment>src/to/Bundle/Features/</comment>), " .
+                "\n- a feature (<comment>src/to/Bundle/Features/*.feature</comment>), " .
+                "\n- a scenario at specific line (<comment>src/to/Bundle/Features/*.feature:10</comment>). " .
+                "\n- Also, you can use short bundle notation (<comment>@BundleName/*.feature:10</comment>)"
             )
             ->configureProcessors()
             ->addOption('--strict', null, InputOption::VALUE_NONE,
@@ -57,7 +59,7 @@ class BundleCommand extends BehatCommand
     /**
      * {@inheritdoc}
      */
-    protected function getContainer()
+    public function getContainer()
     {
         return $this->getApplication()->getKernel()->getContainer();
     }

@@ -31,7 +31,7 @@ Feature: Browser Steps
           When I follow "p100"
           Then I should see "Page N100"
       """
-    When I run "./console behat:path %features_path%/browser.feature -f progress --no-colors --no-time"
+    When I run "./console behat %features_path%/browser.feature -f progress --no-colors --no-time"
     Then It should fail with:
       """
       ...........F-
@@ -63,7 +63,7 @@ Feature: Browser Steps
           Given I go to "/_behat/tests/redirect"
           Then I should see "Page N1"
       """
-    When I run "./console behat:path %features_path%/redirect.feature -f progress --no-colors --no-time"
+    When I run "./console behat %features_path%/redirect.feature -f progress --no-colors --no-time"
     Then It should fail with:
       """
       ..F...
