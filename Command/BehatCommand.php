@@ -60,7 +60,7 @@ class BehatCommand extends BaseCommand
     /**
      * {@inheritdoc}
      */
-    public function getContainer()
+    protected function getContainer()
     {
         return $this->getApplication()->getKernel()->getContainer();
     }
