@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\BehatBundle\Console\Processor;
+namespace Behat\BehatBundle\Console\Processor\Bundle;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputInterface,
@@ -17,11 +17,11 @@ use Behat\Behat\Console\Processor\ContextProcessor as BaseProcessor;
  */
 
 /**
- * BundleContext processor.
+ * Bundle Context processor.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BundleContextProcessor extends BaseProcessor
+class ContextProcessor extends BaseProcessor
 {
     /**
      * {@inheritdoc}

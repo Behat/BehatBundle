@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\BehatBundle\Console\Processor;
+namespace Behat\BehatBundle\Console\Processor\Bundle;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputInterface,
@@ -17,7 +17,7 @@ use Behat\Behat\Console\Processor\LocatorProcessor as BaseProcessor;
  */
 
 /**
- * Path locator processor.
+ * Bundle locator processor.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */

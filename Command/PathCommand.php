@@ -33,8 +33,8 @@ class PathCommand extends BundleCommand
             ->setName('behat:path')
             ->setDescription('Tests specified feature(s)')
             ->setProcessors(array(
-                new Processor\LocatorProcessor(),
-                new BundleProcessor\PathContextProcessor(),
+                new BundleProcessor\Path\LocatorProcessor(),
+                new BundleProcessor\Path\ContextProcessor(),
                 new Processor\FormatProcessor(),
                 new Processor\HelpProcessor(),
                 new Processor\GherkinProcessor(),

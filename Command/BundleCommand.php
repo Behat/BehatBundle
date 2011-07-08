@@ -34,9 +34,9 @@ class BundleCommand extends BehatCommand
             ->setName('behat:bundle')
             ->setDescription('Tests specified bundle features')
             ->setProcessors(array(
-                new BundleProcessor\LocatorProcessor(),
+                new BundleProcessor\Bundle\LocatorProcessor(),
                 new BundleProcessor\InitProcessor(),
-                new BundleProcessor\BundleContextProcessor(),
+                new BundleProcessor\Bundle\ContextProcessor(),
                 new Processor\FormatProcessor(),
                 new Processor\HelpProcessor(),
                 new Processor\GherkinProcessor(),
