@@ -46,7 +46,7 @@ class InitProcessor extends BaseProcessor
     protected function initBundleDirectoryStructure(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
         $bundlePath  = preg_replace('/Bundle[\/\\\\]Features.*$/', 'Bundle', $input->getArgument('features'));
-        $bundleFound = false;
+        $bundleFound = null;
         foreach ($container->get('kernel')->getBundles() as $bundle) {
             if (realpath($bundle->getPath()) === realpath($bundlePath)) {
                 $bundleFound = $bundle;
