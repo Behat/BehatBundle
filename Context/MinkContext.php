@@ -2,8 +2,7 @@
 
 namespace Behat\BehatBundle\Context;
 
-use Behat\Mink\Mink,
-    Behat\Mink\Behat\Context\MinkContext as BaseContext;
+use Behat\Mink\Mink;
 
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -20,7 +19,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class MinkContext extends BaseContext
+abstract class MinkContext extends BehatContext
 {
     /**
      * Symfony2 kernel instance.
