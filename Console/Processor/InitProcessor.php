@@ -49,11 +49,11 @@ class InitProcessor extends BaseProcessor
         $bundleFound = false;
         foreach ($container->get('kernel')->getBundles() as $bundle) {
             if (realpath($bundle->getPath()) === realpath($bundlePath)) {
-                $bundleFound = true;
+                $bundleFound = $bundle;
                 break;
             }
         }
-        if (!$bundleFound) {
+        if (null === $bundleFound) {
             throw new \InvalidArgumentException(
                 sprintf('Can not find bundle at path "%s". Have you enabled it?', $bundlePath)
             );
@@ -63,16 +63,7 @@ class InitProcessor extends BaseProcessor
         $locator      = $container->get('behat.path_locator');
         $basePath     = realpath($locator->getWorkPath()).DIRECTORY_SEPARATOR;
         $contextPath  = $featuresPath.DIRECTORY_SEPARATOR.'Context';
-
-        $namespace  = '';
-        $bundlePath = dirname($featuresPath);
-        foreach ($container->get('kernel')->getBundles() as $bundle) {
-            if (false !== strpos($bundlePath, $bundle->getPath())) {
-                $tmp = str_replace('\\', '/', get_class($bundle));
-                $namespace = str_replace('/', '\\', dirname($tmp));
-                break;
-            }
-        }
+        $namespace    = $bundleFound->getNamespace();
 
         if (!is_dir($featuresPath)) {
             mkdir($featuresPath, 0777, true);
