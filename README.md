@@ -33,7 +33,7 @@ git submodule add -f git://github.com/Behat/Behat.git vendor/Behat/Behat
 // app/autoload.php
 $loader->registerNamespaces(array(
     // ...
-    'Behat\BehatBundle' => __DIR__.'/../vendor',
+    'Behat\BehatBundle' => __DIR__.'/../vendor/bundles',
     'Behat\Behat'       => __DIR__.'/../vendor/Behat/Behat/src',
     'Behat\Gherkin'     => __DIR__.'/../vendor/Behat/Gherkin/src',
     // ...
