@@ -25,6 +25,21 @@ git submodule add -f git://github.com/Behat/BehatBundle.git vendor/Behat/BehatBu
 git submodule add -f git://github.com/Behat/Gherkin.git vendor/Behat/Gherkin
 git submodule add -f git://github.com/Behat/Behat.git vendor/Behat/Behat
 ```
+If you follow with deps:
+
+``` bash
+[BehatBundle]
+    git=https://github.com/Behat/BehatBundle.git
+    target=/bundles/Behat/BehatBundle
+
+[Gherkin]
+    git=https://github.com/Behat/Gherkin.git
+    target=/behat/Gherkin
+
+[Behat]
+    git=https://github.com/Behat/Behat.git
+    target=/behat/Behat
+```
 
 ### Add Gherkin, Behat & BehatBundle namespaces to autoload
 
@@ -34,8 +49,8 @@ git submodule add -f git://github.com/Behat/Behat.git vendor/Behat/Behat
 $loader->registerNamespaces(array(
     // ...
     'Behat\BehatBundle' => __DIR__.'/../vendor',
-    'Behat\Behat'       => __DIR__.'/../vendor/Behat/Behat/src',
-    'Behat\Gherkin'     => __DIR__.'/../vendor/Behat/Gherkin/src',
+    'Behat\Behat'       => __DIR__.'/../vendor/behat/Behat/src',
+    'Behat\Gherkin'     => __DIR__.'/../vendor/behat/Gherkin/src',
     // ...
 ));
 ```
