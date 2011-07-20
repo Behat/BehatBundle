@@ -106,13 +106,13 @@ If you want to test web interface of your application with Mink:
 If you extended your `FeatureContext` from `MinkContext`, then you could use one of the predefined web steps. You can check all available for specific context (bundle) definitions with:
 
 ``` bash
-app/console behat:test:bundle Your\\Bundle\\Namespace --definitions
+app/console behat Your\\Bundle\\Namespace --definitions
 ```
 
 or even in your language:
 
 ``` bash
-app/console behat:test:bundle Your\\Bundle\\Namespace --definitions --lang fr
+app/console behat Your\\Bundle\\Namespace --definitions --lang fr
 ```
 
 ## Command line
@@ -123,27 +123,27 @@ BehatBundle provides some very useful CLI commands for running your features.
 
 This command will create initial bundle features directory:
 
-    php app/console behat:test:bundle --init Acme\\DemoBundle
+    php app/console behat --init Acme\\DemoBundle
 
 ### Run bundle tests
 
 This command runs all features inside single bundle:
 
-    php app/console behat:test:bundle Acme\\DemoBundle
+    php app/console behat Acme\\DemoBundle
 
 ### Run features by path
 
 This command runs specified feature:
 
-    php app/console behat:test:path src/Application/HelloBundle/Tests/Features/SingleFeature.feature
+    php app/console behat src/Application/HelloBundle/Tests/Features/SingleFeature.feature
 
 All features inside `src/Application/HelloBundle/Tests/Features` folder:
 
-    php app/console behat:test:path src/Application/HelloBundle/Tests/Features
+    php app/console behat src/Application/HelloBundle/Tests/Features
 
 Single scenario on line 21 in specified feature:
 
-    php app/console behat:test:path src/Application/HelloBundle/Tests/Features/SingleFeature.feature:21
+    php app/console behat src/Application/HelloBundle/Tests/Features/SingleFeature.feature:21
 
 ## CREDITS
 
