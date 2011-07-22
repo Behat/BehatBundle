@@ -48,7 +48,7 @@ If you follow with deps:
 // app/autoload.php
 $loader->registerNamespaces(array(
     // ...
-    'Behat\BehatBundle' => __DIR__.'/../vendor',
+    'Behat\BehatBundle' => __DIR__.'/../vendor/bundles',
     'Behat\Behat'       => __DIR__.'/../vendor/behat/Behat/src',
     'Behat\Gherkin'     => __DIR__.'/../vendor/behat/Gherkin/src',
     // ...
