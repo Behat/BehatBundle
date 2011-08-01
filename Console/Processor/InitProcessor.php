@@ -29,6 +29,11 @@ class InitProcessor extends BaseProcessor
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
+        // throw exception if no features argument provided
+        if (!$input->getArgument('features') && $input->getOption('init')) {
+            throw new \InvalidArgumentException('Provide features argument in order to init suite');
+        }
+
         if ($input->getOption('init')) {
             $this->initBundleDirectoryStructure($container, $input, $output);
 

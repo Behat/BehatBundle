@@ -28,6 +28,11 @@ class ContextProcessor extends BaseProcessor
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
+        // ignore context initialization if no features argument provided
+        if (!$input->getArgument('features')) {
+            return;
+        }
+
         $contextDispatcher = $container->get('behat.context_dispatcher');
         $contextDispatcher->setContextClass($this->getContextClass($container, $input));
 
