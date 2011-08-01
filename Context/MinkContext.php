@@ -96,7 +96,7 @@ abstract class MinkContext extends BaseContext
      */
     public function getParameters()
     {
-        return $this->getContainer()->getParameterBag()->all();
+        return $this->getContainer()->getParameter('behat.context.parameters');
     }
 
     /**
@@ -108,6 +108,12 @@ abstract class MinkContext extends BaseContext
      */
     public function getParameter($name)
     {
-        return $this->getContainer()->getParameter('behat.mink.' . $name);
+        if ($this->getContainer()->hasParameter("behat.mink.$name")) {
+            return $this->getContainer()->getParameter("behat.mink.$name");
+        }
+
+        $parameters = $this->getParameters();
+
+        return $parameters[$name];
     }
 }
