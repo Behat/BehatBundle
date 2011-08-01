@@ -26,6 +26,16 @@ class BehatExtension extends BaseExtension
     /**
      * {@inheritdoc}
      */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->configuration = new Configuration();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function loadDefaults($container)
     {
         $behatClassLoaderReflection = new \ReflectionClass('Behat\Behat\Console\BehatApplication');

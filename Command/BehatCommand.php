@@ -89,12 +89,21 @@ class BehatCommand extends BaseCommand
     {
         $gherkin = $this->getContainer()->get('gherkin');
 
+        $testBundles   = (array) $this->getContainer()->getParameter('behat.bundles');
+        $ignoreBundles = (array) $this->getContainer()->getParameter('behat.ignore_bundles');
+
         $this->startSuite();
 
         foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
+            if (count($testBundles) && !in_array($bundle->getName(), $testBundles)) {
+                continue;
+            }
+            if (count($ignoreBundles) && in_array($bundle->getName(), $ignoreBundles)) {
+                continue;
+            }
+
             $contextClass = $bundle->getNamespace().'\Features\Context\FeatureContext';
             $featuresPath = $bundle->getPath().DIRECTORY_SEPARATOR.'Features';
-
             if (!class_exists($contextClass)) {
                 continue;
             }
