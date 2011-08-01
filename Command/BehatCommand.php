@@ -105,6 +105,8 @@ class BehatCommand extends BaseCommand
             $hookDisp       = $this->getContainer()->get('behat.hook_dispatcher');
             $contextDisp    = $this->getContainer()->get('behat.context_dispatcher');
             $contextReader  = $this->getContainer()->get('behat.context_reader');
+            $logger         = $this->getContainer()->get('behat.logger');
+            $parameters     = $this->getContainer()->getParameter('behat.context.parameters');
 
             // clean definitions, transformations and hooks
             $definitionDisp->removeDefinitions();
@@ -119,6 +121,9 @@ class BehatCommand extends BaseCommand
             $pathsLocator->locateBasePath($featuresPath);
             $paths = $pathsLocator->locateFeaturesPaths();
 
+            // run bundle beforeSuite hooks
+            $hookDisp->beforeSuite(new SuiteEvent($logger, $parameters, false));
+
             // read all features from their paths
             foreach ($paths as $path) {
                 // parse every feature with Gherkin
@@ -130,6 +135,8 @@ class BehatCommand extends BaseCommand
                 }
             }
 
+            // run bundle afterSuite hooks
+            $hookDisp->afterSuite(new SuiteEvent($logger, $parameters, true));
         }
 
         return $this->finishSuite($input);
