@@ -57,4 +57,28 @@ abstract class BehatContext extends BaseContext
     {
         return $this->getKernel()->getContainer();
     }
+
+    /**
+     * Returns all context parameters.
+     *
+     * @return  array
+     */
+    public function getParameters()
+    {
+        return $this->getContainer()->getParameter('behat.context.parameters');
+    }
+
+    /**
+     * Returns context parameter.
+     *
+     * @param   string  $name
+     *
+     * @return  mixed
+     */
+    public function getParameter($name)
+    {
+        $parameters = $this->getParameters();
+
+        return $parameters[$name];
+    }
 }
