@@ -39,14 +39,10 @@ class ContextDispatcher extends BaseDispatcher
     }
 
     /**
-     * Create new context instance.
-     *
-     * @return  Behat\Behat\Context\ContextInterface
+     * {@inheritdoc}
      */
-    public function createContext()
+    public function getContextParameters()
     {
-        $class = $this->getContextClass();
-
-        return new $class($this->kernel);
+        return $this->kernel;
     }
 }

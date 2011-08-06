@@ -3,7 +3,7 @@
 namespace Behat\BehatBundle\Context;
 
 use Behat\Mink\Mink,
-    Behat\Mink\Behat\Context\MinkContext as BaseContext;
+    Behat\Mink\Behat\Context\BaseMinkContext;
 
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class MinkContext extends BaseContext
+abstract class MinkContext extends BaseMinkContext
 {
     /**
      * Symfony2 kernel instance.
@@ -43,11 +43,6 @@ abstract class MinkContext extends BaseContext
     public function __construct(HttpKernelInterface $kernel)
     {
         $this->kernel = $kernel;
-
-        if (null === self::$mink) {
-            self::$mink = $this->getContainer()->get('behat.mink');
-            $this->registerSessions(self::$mink);
-        }
     }
 
     /**
@@ -81,15 +76,6 @@ abstract class MinkContext extends BaseContext
     }
 
     /**
-     * Registers additional Mink sessions.
-     *
-     * @param   Behat\Mink\Mink     $mink   Mink manager instance
-     */
-    protected function registerSessions(Mink $mink)
-    {
-    }
-
-    /**
      * Returns all context parameters.
      *
      * @return  array
@@ -115,5 +101,29 @@ abstract class MinkContext extends BaseContext
         $parameters = $this->getParameters();
 
         return $parameters[$name];
+    }
+
+    /**
+     * Initializes Mink instance and sessions.
+     *
+     * @param   Behat\Behat\Event\SuiteEvent $event
+     *
+     * @BeforeSuite
+     */
+    public static function initMinkSessions(SuiteEvent $event)
+    {
+        $kernel     = $event->getContextParameters();
+        self::$mink = $kernel->getContainer()->get('behat.mink');
+    }
+
+    /**
+     * Stops started Mink sessions.
+     *
+     * @AfterSuite
+     */
+    public static function stopMinkSessions()
+    {
+        self::$mink->stopSessions();
+        self::$mink = null;
     }
 }

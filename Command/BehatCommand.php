@@ -115,12 +115,7 @@ class BehatCommand extends BaseCommand
             $contextDisp    = $this->getContainer()->get('behat.context_dispatcher');
             $contextReader  = $this->getContainer()->get('behat.context_reader');
             $logger         = $this->getContainer()->get('behat.logger');
-            $parameters     = $this->getContainer()->getParameter('behat.context.parameters');
-
-            // clean definitions, transformations and hooks
-            $definitionDisp->removeDefinitions();
-            $definitionDisp->removeTransformations();
-            $hookDisp->removeHooks();
+            $parameters     = $contextDisp->getContextParameters();
 
             // load context information
             $contextDisp->setContextClass($contextClass);
@@ -146,6 +141,11 @@ class BehatCommand extends BaseCommand
 
             // run bundle afterSuite hooks
             $hookDisp->afterSuite(new SuiteEvent($logger, $parameters, true));
+
+            // clean definitions, transformations and hooks
+            $definitionDisp->removeDefinitions();
+            $definitionDisp->removeTransformations();
+            $hookDisp->removeHooks();
         }
 
         return $this->finishSuite($input);
