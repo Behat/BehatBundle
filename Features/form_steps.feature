@@ -6,6 +6,7 @@ Feature: Form Steps
   Background:
     Given basic BehatBundle environment
 
+  @javascript
   Scenario: Javascript Browsing
     Given a feature named "form.feature" with:
       """
