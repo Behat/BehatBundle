@@ -2,6 +2,8 @@
 
 namespace Behat\BehatBundle\Context;
 
+use Behat\Behat\Event\SuiteEvent;
+
 use Behat\Mink\Mink,
     Behat\Mink\Behat\Context\BaseMinkContext;
 
@@ -112,18 +114,9 @@ abstract class MinkContext extends BaseMinkContext
      */
     public static function initMinkSessions(SuiteEvent $event)
     {
-        $kernel     = $event->getContextParameters();
-        self::$mink = $kernel->getContainer()->get('behat.mink');
-    }
-
-    /**
-     * Stops started Mink sessions.
-     *
-     * @AfterSuite
-     */
-    public static function stopMinkSessions()
-    {
-        self::$mink->stopSessions();
-        self::$mink = null;
+        if (null === self::$mink) {
+            $kernel     = $event->getContextParameters();
+            self::$mink = $kernel->getContainer()->get('behat.mink');
+        }
     }
 }
