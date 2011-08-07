@@ -227,6 +227,105 @@ should extend ``Behat\BehatBundle\Context\MinkContext`` instead.
     In order to be able to use ``MinkContext``, you should install and configure
     `MinkBundle <http://mink.behat.org/bundle>`_ first.
 
+After changing base class for your bundle context from
+``Behat\BehatBundle\Context\BehatContext`` to ``Behat\BehatBundle\Context\MinkContext``
+you'll be able to use out-of-the box Mink steps in your bundle features. To
+check all available steps, run:
+
+.. code-block:: bash
+
+    $ app/console -e=test behat @AcmeDemoBundle --definitions
+
+or even for specific language:
+
+.. code-block:: bash
+
+    $ app/console -e=test behat @AcmeDemoBundle --definitions --lang=ru
+
+All your steps will be executed against default Mink session - it's ``symfony``
+by default.
+
+.. tip::
+
+    Default session could be easily changed with ``default_session`` option
+    in MinkBundle config:
+
+    .. code-block:: yaml
+
+        # app/config/config_test.yml
+
+        mink:
+          default_session:  goutte
+          goutte:           ~
+
+If you need to run javascript or UI related steps, you'll need to switch your
+scenario to javascript session - it's ``sahi`` by default:
+
+.. code-block:: gherkin
+
+    ...
+
+    @javascript
+    Scenario: Drag'n'Drop scenario
+      ...
+
+Default session for such scenario will become ``sahi``, giving you access to all
+js-specific functionality of the Mink.
+
+.. note::
+
+    ``sahi`` session will automatically start firefox browser for ``@javascript``
+    scenarios. If you want to run your sahi scenario in different browser -
+    you can configure it under the ``browser`` option in the MinkBunde config:
+
+    .. code-block:: yaml
+
+        # app/config/config_test.yml
+
+        mink:
+          browser:  chrome
+          sahi:     ~
+
+.. tip::
+
+    Default javascript session could be easily changed to Zombie.js with
+    ``javascript_session`` option in MinkBundle config:
+
+    .. code-block:: yaml
+
+        # app/config/config_test.yml
+
+        mink:
+          default_session:  zombie
+          zombie:           ~
+
+Or you can even switch all feature to ``@javascript`` session:
+
+.. code-block:: gherkin
+
+    @javascript
+    Feature: My web feature
+      In order to ...
+      As a ...
+      I need to ...
+
+      Scenario: Scenario 1
+        ...
+
+      Scenario: Scenario 2
+        ...
+
+Also, if you want to switch to specific Mink session, you can do it with
+``@mink:...`` tag:
+
+.. code-block:: gherkin
+
+    ...
+
+    @mink:zombie
+    Scenario: Drag'n'Drop in Zombie.js
+      ...
+
 Running Features
 ----------------
 
