@@ -242,8 +242,8 @@ or even for specific language:
 
     $ app/console -e=test behat @AcmeDemoBundle --definitions --lang=ru
 
-All your steps will be executed against default Mink session - it's ``symfony``
-by default.
+All your mink steps will be executed against default Mink session (``symfony``
+by default).
 
 .. tip::
 
@@ -258,8 +258,8 @@ by default.
           default_session:  goutte
           goutte:           ~
 
-If you need to run javascript or UI related steps, you'll need to switch your
-scenario to javascript session - it's ``sahi`` by default:
+If you need to run javascript or UI related steps, you'll need to tag your
+UI/JS scenario with ``@javascript`` tag:
 
 .. code-block:: gherkin
 
@@ -272,10 +272,10 @@ scenario to javascript session - it's ``sahi`` by default:
 Default session for such scenario will become ``sahi``, giving you access to all
 js-specific functionality of the Mink.
 
-.. note::
+.. tip::
 
-    ``sahi`` session will automatically start firefox browser for ``@javascript``
-    scenarios. If you want to run your sahi scenario in different browser -
+    ``sahi`` session will automatically start firefox browser for every ``@javascript``
+    scenario. If you want to run your sahi scenario in different browser -
     you can configure it under the ``browser`` option in the MinkBunde config:
 
     .. code-block:: yaml
@@ -299,7 +299,8 @@ js-specific functionality of the Mink.
           default_session:  zombie
           zombie:           ~
 
-Or you can even switch all feature to ``@javascript`` session:
+Also, you can switch all scenarios inside single feature to ``@javascript``
+session by tagging feature instead:
 
 .. code-block:: gherkin
 
@@ -315,7 +316,7 @@ Or you can even switch all feature to ``@javascript`` session:
       Scenario: Scenario 2
         ...
 
-Also, if you want to switch to specific Mink session, you can do it with
+If you want to switch to specific Mink session instead, you can do it with
 ``@mink:...`` tag:
 
 .. code-block:: gherkin
@@ -375,9 +376,11 @@ Or even specific scenario call:
 Also, BehatBundle supports almost all `configuration options
 <http://docs.behat.org/guides/7.config.html>`_, that Behat does.
 
-Read More About Behat
----------------------
+Read More About Behat & Mink
+----------------------------
 
 If you don't know what Behat is and how it could help your development become
 more successfull, read: `Behat Quick Intro <http://docs.behat.org/quick_intro.html>`_.
 
+If you wan to describe your web application with Mink steps, you should read
+about Mink on it's `official site <http://mink.behat.org>`_.
