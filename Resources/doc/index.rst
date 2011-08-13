@@ -19,21 +19,23 @@ The simplest way to install Behat is through PEAR:
     $ pear channel-discover pear.behat.org
     $ pear install behat/behat
 
-Now you should include Behat's autoloader into your ``app/autoload.php``:
+Now you should include Behat's autoloader in your ``AppKernel::registerBundles()``
+method (for ``test`` environment only):
 
 .. code-block:: php
 
-    <?php
+    <?php # app/AppKernel.php
     
     //...
-    
-    // remove Symfony2 classes from Behat autoload
-    // routine, cuz Symfony2 already autoloads them
-    // by itself
-    define('BEHAT_AUTOLOAD_ZF2', false);
 
-    // require autoloader
-    require_once 'behat/autoload.php';
+    if ('test' === $this->getEnvironment()) {
+        // don't autoload Symfony2 classes, as they are
+        // already loaded by the Symfony2 itself
+        if (!defined('BEHAT_AUTOLOAD_SF2')) define('BEHAT_AUTOLOAD_SF2', false);
+        require_once 'behat/autoload.php';
+    }
+
+    //...
 
 Method #2 (Git)
 ~~~~~~~~~~~~~~~
@@ -213,6 +215,29 @@ methods, that you could use in your suite definitions or hooks:
         $kernel = $this->getKernel();
         $bundles = $kernel->getBundles();
     }
+
+.. note::
+
+    In contrast with Behat's contexts, that get array of context parameters as
+    context constructor argument - BehatBundle contexts **always** get
+    KernelInterface instance as argument:
+
+    .. code-block:: php
+
+        <?php
+
+        namespace Acme\DemoBundle\Features\Context;
+
+        use Behat\BehatBundle\Context\BehatContext;
+        use Symfony\Component\HttpKernel\KernelInterface;
+
+        class FeatureContext extends BehatContext
+        {
+            public function __construct(KernelInterface $kernel)
+            {
+                // ...
+            }
+        }
 
 Mink Integration: ``MinkContext``
 ---------------------------------
