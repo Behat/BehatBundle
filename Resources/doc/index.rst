@@ -239,6 +239,22 @@ methods, that you could use in your suite definitions or hooks:
             }
         }
 
+.. note::
+
+    BehatBundle provides two new contexts:
+
+    1. ``Behat\BehatBundle\Context\BehatContext``
+    2. ``Behat\BehatBundle\Context\MinkContext``
+
+    They both are just a extension layer on top of the:
+
+    1. ``Behat\Behat\Context\BehatContext``
+    2. ``Behat\Mink\Behat\Context\MinkContext``
+
+    which adds Symfony2 application knowledge to them (kernel, service
+    container, services and their parameters). So, it's a preffered way to
+    extend and use BehatBundle contexts instead of basic Behat and Mink ones.
+
 Mink Integration: ``MinkContext``
 ---------------------------------
 
