@@ -146,8 +146,8 @@ extremely easy to test them with Behat.
 Bundle's ``FeatureContext`` Class
 ---------------------------------
 
-Every bundle in your application could have it's own feature suite. And every
-feature suite has it's own independent context class (``FeatureContext``).
+Every bundle in your application could have its own feature suite. And every
+feature suite has its own independent context class (``FeatureContext``).
 
 For example, created in previous chapter context class would look like this:
 
@@ -252,7 +252,7 @@ methods, that you could use in your suite definitions or hooks:
     2. ``Behat\Mink\Behat\Context\MinkContext``
 
     which adds Symfony2 application knowledge to them (kernel, service
-    container, services and their parameters). So, it's a preffered way to
+    container, services and their parameters). So, it's a preferred way to
     extend and use BehatBundle contexts instead of basic Behat and Mink ones.
 
 Mink Integration: ``MinkContext``
@@ -317,15 +317,15 @@ js-specific functionality of the Mink.
 
     ``sahi`` session will automatically start firefox browser for every ``@javascript``
     scenario. If you want to run your sahi scenario in different browser -
-    you can configure it under the ``browser`` option in the MinkBunde config:
+    you can configure it under the ``browser_name`` option in the MinkBunde config:
 
     .. code-block:: yaml
 
         # app/config/config_test.yml
 
         mink:
-          browser:  chrome
-          sahi:     ~
+          browser_name:  chrome
+          sahi:          ~
 
 .. tip::
 
@@ -337,8 +337,8 @@ js-specific functionality of the Mink.
         # app/config/config_test.yml
 
         mink:
-          default_session:  zombie
-          zombie:           ~
+          javascript_session:  zombie
+          zombie:              ~
 
 Also, you can switch all scenarios inside single feature to ``@javascript``
 session by tagging feature instead:
@@ -424,4 +424,4 @@ If you don't know what Behat is and how it could help your development become
 more successfull, read: `Behat Quick Intro <http://docs.behat.org/quick_intro.html>`_.
 
 If you wan to describe your web application with Mink steps, you should read
-about Mink on it's `official site <http://mink.behat.org>`_.
+about Mink on its `official site <http://mink.behat.org>`_.
