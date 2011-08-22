@@ -317,15 +317,15 @@ js-specific functionality of the Mink.
 
     ``sahi`` session will automatically start firefox browser for every ``@javascript``
     scenario. If you want to run your sahi scenario in different browser -
-    you can configure it under the ``browser`` option in the MinkBunde config:
+    you can configure it under the ``browser_name`` option in the MinkBunde config:
 
     .. code-block:: yaml
 
         # app/config/config_test.yml
 
         mink:
-          browser:  chrome
-          sahi:     ~
+          browser_name:  chrome
+          sahi:          ~
 
 .. tip::
 
