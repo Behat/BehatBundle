@@ -102,7 +102,7 @@ class BehatCommand extends BaseCommand
                 continue;
             }
 
-            $contextClass = $bundle->getNamespace().'\Features\Context\FeatureContext';
+            $contextClass = $this->getContextClass($bundle);
             $featuresPath = $bundle->getPath().DIRECTORY_SEPARATOR.'Features';
             if (!class_exists($contextClass)) {
                 continue;
@@ -149,5 +149,17 @@ class BehatCommand extends BaseCommand
         }
 
         return $this->finishSuite($input);
+    }
+
+    protected function getContextClass($bundle)
+    {
+        $defaultContextClass = 'FeatureContext';
+        $contextClass = $this->getContainer()->getParameter('behat.context.class');
+
+        if ($defaultContextClass !== $contextClass) {
+            return $contextClass;
+        }
+
+        return $bundle->getNamespace() . '\Features\Context\FeatureContext';
     }
 }
