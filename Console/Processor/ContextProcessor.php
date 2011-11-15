@@ -69,6 +69,6 @@ class ContextProcessor extends BaseProcessor
             return $namespacedContext;
         }
 
-        return $contextClass;
+        throw new \RuntimeException('Behat context class not found');
     }
 }
