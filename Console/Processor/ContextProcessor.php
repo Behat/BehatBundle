@@ -46,7 +46,7 @@ class ContextProcessor extends BaseProcessor
     protected function getContextClass(ContainerInterface $container, InputInterface $input)
     {
         $contextClass = $container->getParameter('behat.context.class');
-        if ('FeatureContext' !== $contextClass) {
+        if (null !== $contextClass) {
             return $contextClass;
         }
 
