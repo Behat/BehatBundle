@@ -45,6 +45,11 @@ class ContextProcessor extends BaseProcessor
      */
     protected function getContextClass(ContainerInterface $container, InputInterface $input)
     {
+        $contextClass = $container->getParameter('behat.context.class');
+        if (null !== $contextClass) {
+            return $contextClass;
+        }
+
         $featuresPath = preg_replace('/\:\d+$/', '', $input->getArgument('features'));
 
         $namespacedContext = null;
@@ -64,6 +69,6 @@ class ContextProcessor extends BaseProcessor
             return $namespacedContext;
         }
 
-        return $container->getParameter('behat.context.class');
+        throw new \RuntimeException('Behat context class not found');
     }
 }
