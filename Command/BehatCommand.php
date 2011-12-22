@@ -43,7 +43,7 @@ class BehatCommand extends BaseCommand
                 new Processor\FormatProcessor(),
                 new BundleProcessor\HelpProcessor(),
                 new Processor\GherkinProcessor(),
-                new BundleProcessor\RerunProcessor(),
+                new Processor\RunProcessor(),
             ))
             ->addArgument('features', InputArgument::OPTIONAL,
                 "Feature(s) to run. Could be:".
@@ -56,28 +56,7 @@ class BehatCommand extends BaseCommand
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getContainer()
-    {
-        return $this->getApplication()->getKernel()->getContainer();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        // if features argument provided
-        if ($input->getArgument('features')) {
-            // run specific bundle features
-            return parent::execute($input, $output);
-        }
-
-        // otherways run all registered bundles features
-        return $this->executeAllRegisteredBundles($input, $output);
-    }
+  
 
     /**
      * {@inheritdoc}
