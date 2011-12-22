@@ -53,9 +53,6 @@ class BehatCommand extends BaseCommand
                 "\n- Also, you can use short bundle notation (<comment>@BundleName/*.feature:10</comment>)"
             )
             ->configureProcessors()
-            ->addOption('--strict', null, InputOption::VALUE_NONE,
-                'Fail if there are any undefined or pending steps.'
-            )
         ;
     }
 
