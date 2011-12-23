@@ -111,7 +111,7 @@ class Runner extends BaseRunner
 
                 // and run it in FeatureTester
                 foreach ($features as $feature) {
-                    $tester = $this->getContainer()->get('behat.tester.feature');
+                    $tester = $this->container->get('behat.tester.feature');
                     $tester->setDryRun($this->isDryRun());
 
                     $feature->accept($tester);
