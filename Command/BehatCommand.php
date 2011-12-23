@@ -5,9 +5,12 @@ namespace Behat\BehatBundle\Command;
 use Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface;
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use Behat\Behat\Console\Command\BehatCommand as BaseCommand,
+use Behat\Behat\DependencyInjection\BehatExtension,
+    Behat\BehatBundle\DependencyInjection\BehatExtension as BehatBundleExtension,    
+    Behat\Behat\Console\Command\BehatCommand as BaseCommand,
     Behat\Behat\Console\Processor,
     Behat\Behat\Event\SuiteEvent;
 
@@ -28,22 +31,34 @@ use Behat\BehatBundle\Console\Processor as BundleProcessor;
  */
 class BehatCommand extends BaseCommand
 {
+    
+    /**
+     * Service container.
+     *
+     * @var     Symfony\Component\DependencyInjection\ContainerBuilder
+     */
+    private $container;
+    
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        
+        $this->container = new ContainerBuilder();
+        
         $this
             ->setName('behat')
             ->setDescription('Tests Behat feature(s) in specified bundle')
             ->setProcessors(array(
+                new BundleProcessor\ContainerProcessor(),
                 new BundleProcessor\LocatorProcessor(),
                 new BundleProcessor\InitProcessor(),
                 new BundleProcessor\ContextProcessor(),
                 new Processor\FormatProcessor(),
                 new BundleProcessor\HelpProcessor(),
                 new Processor\GherkinProcessor(),
-                new BundleProcessor\RerunProcessor(),
+                new Processor\RunProcessor(),
             ))
             ->addArgument('features', InputArgument::OPTIONAL,
                 "Feature(s) to run. Could be:".
@@ -53,55 +68,57 @@ class BehatCommand extends BaseCommand
                 "\n- Also, you can use short bundle notation (<comment>@BundleName/*.feature:10</comment>)"
             )
             ->configureProcessors()
-            ->addOption('--strict', null, InputOption::VALUE_NONE,
-                'Fail if there are any undefined or pending steps.'
-            )
         ;
+        
+        $kernel = new \AppKernel('test', 'true');
+        $kernel->boot();
+        $this->container->set('kernel',$kernel);
     }
-
+    
     /**
-     * {@inheritdoc}
+     * {@inheritdoc} 
      */
-    protected function getContainer()
+    protected function getContainer() 
     {
-        return $this->getApplication()->getKernel()->getContainer();
+        return $this->container;
     }
-
+  
     /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        
         // if features argument provided
         if ($input->getArgument('features')) {
             // run specific bundle features
-            return parent::execute($input, $output);
+            return $this->getContainer()->get('behat.runner')->run();
         }
-
+        
         // otherways run all registered bundles features
-        return $this->executeAllRegisteredBundles($input, $output);
+        return implode(PHP_EOL,$this->executeAllRegisteredBundles());
+        
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function executeAllRegisteredBundles(InputInterface $input, OutputInterface $output)
+    protected function executeAllRegisteredBundles()
     {
-        $gherkin = $this->getContainer()->get('gherkin');
-
-        $testBundles   = (array) $this->getContainer()->getParameter('behat.bundles');
-        $ignoreBundles = (array) $this->getContainer()->getParameter('behat.ignore_bundles');
-
-        $this->startSuite();
-
-        foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
+        
+        $testBundles   = (array) $this->container->getParameter('behat.bundles');
+        $ignoreBundles = (array) $this->container->getParameter('behat.ignore_bundles');
+    
+        $output = array();
+        
+        foreach ($this->container->get('kernel')->getBundles() as $bundle) {
             if (count($testBundles) && !in_array($bundle->getName(), $testBundles)) {
                 continue;
             }
             if (count($ignoreBundles) && in_array($bundle->getName(), $ignoreBundles)) {
                 continue;
             }
-
+            
             $contextClass = $bundle->getNamespace().'\Features\Context\FeatureContext';
             $featuresPath = $bundle->getPath().DIRECTORY_SEPARATOR.'Features';
             if (!class_exists($contextClass)) {
@@ -110,44 +127,21 @@ class BehatCommand extends BaseCommand
 
             // get all the needed services
             $pathsLocator   = $this->getContainer()->get('behat.path_locator');
-            $definitionDisp = $this->getContainer()->get('behat.definition_dispatcher');
-            $hookDisp       = $this->getContainer()->get('behat.hook_dispatcher');
-            $contextDisp    = $this->getContainer()->get('behat.context_dispatcher');
-            $contextReader  = $this->getContainer()->get('behat.context_reader');
-            $logger         = $this->getContainer()->get('behat.logger');
-            $parameters     = $contextDisp->getContextParameters();
-
-            // load context information
-            $contextDisp->setContextClass($contextClass);
-            $contextReader->read();
 
             // locate bundle features
             $pathsLocator->locateBasePath($featuresPath);
-            $paths = $pathsLocator->locateFeaturesPaths();
+            
+            $this->container->get('behat.runner')->setFeaturesPaths($pathsLocator->locateFeaturesPaths());
 
-            // run bundle beforeSuite hooks
-            $hookDisp->beforeSuite(new SuiteEvent($logger, $parameters, false));
+            $contextDispatcher = $this->container->get('behat.context_dispatcher');
+            $contextDispatcher->setContextClass($contextClass);
 
-            // read all features from their paths
-            foreach ($paths as $path) {
-                // parse every feature with Gherkin
-                $features = $gherkin->load((string) $path);
-
-                // and run it in FeatureTester
-                foreach ($features as $feature) {
-                    $feature->accept($this->getContainer()->get('behat.tester.feature'));
-                }
-            }
-
-            // run bundle afterSuite hooks
-            $hookDisp->afterSuite(new SuiteEvent($logger, $parameters, true));
-
-            // clean definitions, transformations and hooks
-            $definitionDisp->removeDefinitions();
-            $definitionDisp->removeTransformations();
-            $hookDisp->removeHooks();
+            $contextReader = $this->container->get('behat.context_reader');
+            $contextReader->read();
+            
+            $output[] = $this->container->get('behat.runner')->run();
         }
 
-        return $this->finishSuite($input);
+        return $output;
     }
 }

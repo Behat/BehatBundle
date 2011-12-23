@@ -45,7 +45,6 @@ class BehatExtension extends BaseExtension
         $gherkinLibPath = realpath(dirname($gherkinParserReflection->getFilename()) . '/../../../');
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config/'));
-        $loader->load($behatLibPath . '/src/Behat/Behat/DependencyInjection/config/behat.xml');
         $loader->load('behat_bundle.xml');
 
         $container->setParameter('gherkin.paths.lib', $gherkinLibPath);
