@@ -5,6 +5,7 @@
     <parameters>
         <parameter key="behat.context.class">null</parameter>
         <parameter key="behat.context_dispatcher.class">Behat\BehatBundle\Context\ContextDispatcher</parameter>
+        <parameter key="behat.runner.class">Behat\BehatBundle\Runner</parameter>
         <parameter key="behat.bundles" type="collection"></parameter>
         <parameter key="behat.ignore_bundles" type="collection"></parameter>
     </parameters>
