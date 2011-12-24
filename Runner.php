@@ -18,13 +18,12 @@ use Behat\Behat\Runner as BaseRunner;
 /**
  * Behat suite runner.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author      Christophe Coevoet <stof@notk.org>
  */
 class Runner extends BaseRunner
 {
     private $container;
     private $runAllBundles = false;
-    private $featuresPaths = array();
 
     /**
      * Initializes runner.
