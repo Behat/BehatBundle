@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Console\Processor\RerunProcessor as BaseProcessor;
+use Behat\Behat\Console\Processor\RunProcessor as BaseProcessor;
 
 /*
  * This file is part of the Behat\BehatBundle.
@@ -21,7 +21,7 @@ use Behat\Behat\Console\Processor\RerunProcessor as BaseProcessor;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RerunProcessor extends BaseProcessor
+class RunProcessor extends BaseProcessor
 {
     /**
      * {@inheritdoc}
@@ -29,8 +29,12 @@ class RerunProcessor extends BaseProcessor
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
         // throw exception on --rerun if no features argument provided
-        if (!$input->getArgument('features') && $input->getOption('rerun')) {
-            throw new \InvalidArgumentException('Provide features argument in order to use rerun');
+        if (!$input->getArgument('features')) {
+            if ($input->getOption('rerun')) {
+                throw new \InvalidArgumentException('Provide features argument in order to use rerun');
+            }
+
+            $container->get('behat.runner')->setRunAllBundles(true);
         }
 
         parent::process($container, $input, $output);
