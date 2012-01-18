@@ -33,11 +33,9 @@ class ContextProcessor extends BaseProcessor
             return;
         }
 
-        $contextDispatcher = $container->get('behat.context_dispatcher');
-        $contextDispatcher->setContextClass($this->getContextClass($container, $input));
-
-        $contextReader = $container->get('behat.context_reader');
-        $contextReader->read();
+        $container->get('behat.runner')->setMainContextClass(
+            $this->getContextClass($container, $input)
+        );
     }
 
     /**
@@ -45,30 +43,18 @@ class ContextProcessor extends BaseProcessor
      */
     protected function getContextClass(ContainerInterface $container, InputInterface $input)
     {
-        $contextClass = $container->getParameter('behat.context.class');
-        if (class_exists($contextClass)) {
-            return $contextClass;
-        }
-
         $featuresPath = preg_replace('/\:\d+$/', '', $input->getArgument('features'));
-
-        $namespacedContext = null;
         if (preg_match('/^\@([^\/\\\\]+)(.*)$/', $featuresPath, $matches)) {
-            $bundle = $container->get('kernel')->getBundle($matches[1]);
-            $namespacedContext = $bundle->getNamespace() . '\Features\Context\FeatureContext';
+            $bundleNamespace = $container->get('kernel')->getBundle($matches[1])->getNamespace();
         } else {
             foreach ($container->get('kernel')->getBundles() as $bundle) {
                 if (false !== strpos(realpath($featuresPath), realpath($bundle->getPath()))) {
-                    $namespacedContext = $bundle->getNamespace() . '\Features\Context\FeatureContext';
+                    $bundleNamespace = $bundle->getNamespace();
                     break;
                 }
             }
         }
 
-        if (null !== $namespacedContext && class_exists($namespacedContext)) {
-            return $namespacedContext;
-        }
-
-        throw new \RuntimeException('Behat context class not found');
+        return $container->get('behat.runner')->getContextClassForBundle($bundleNamespace);
     }
 }

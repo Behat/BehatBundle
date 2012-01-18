@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\Console\Command\BehatCommand as BaseCommand,
+    Behat\Behat\Console\Input\InputDefinition,
     Behat\Behat\Console\Processor,
     Behat\Behat\Event\SuiteEvent;
 
@@ -36,6 +37,7 @@ class BehatCommand extends BaseCommand
         $this
             ->setName('behat')
             ->setDescription('Tests Behat feature(s) in specified bundle')
+            ->setDefinition(new InputDefinition)
             ->setProcessors(array(
                 new BundleProcessor\LocatorProcessor(),
                 new BundleProcessor\InitProcessor(),

@@ -22,19 +22,7 @@ use Behat\Behat\Runner as BaseRunner;
  */
 class Runner extends BaseRunner
 {
-    private $container;
     private $runAllBundles = false;
-
-    /**
-     * Initializes runner.
-     *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-        $this->container = $container;
-    }
 
     /**
      * Sets runner to run all bundles.
@@ -47,29 +35,46 @@ class Runner extends BaseRunner
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getContextClassForBundle($bundleNamespace)
+    {
+        $contextClass = $this->getContainer()->getParameter('behat.context.class');
+
+        if (null !== $contextClass && class_exists($bundleNamespace.'\\'.$contextClass)) {
+            return $bundleNamespace.'\\'.$contextClass;
+        }
+
+        if (null !== $contextClass && class_exists($contextClass)) {
+            return $contextClass;
+        }
+
+        if (class_exists($bundleNamespace.'\\Features\\Context\\FeatureContext')) {
+            return $bundleNamespace.'\\Features\\Context\\FeatureContext';
+        }
+    }
+
+    /**
      * Runs feature suite.
      *
      * @return  integer CLI return code
      */
-    public function run()
+    public function runSuite()
     {
         if (!$this->runAllBundles) {
-            return parent::run();
+            return parent::runSuite();
         }
 
-        return $this->runAllRegisteredBundles();
-    }
-
-    protected function runAllRegisteredBundles()
-    {
-        $gherkin = $this->container->get('gherkin');
-
+        $gherkin       = $this->getContainer()->get('gherkin');
+        $logger        = $this->getContainer()->get('behat.logger');
+        $hooks         = $this->getContainer()->get('behat.hook_dispatcher');
+        $parameters    = $this->getContainer()->get('behat.context_dispatcher')->getContextParameters();
         $testBundles   = (array) $this->container->getParameter('behat.bundles');
         $ignoreBundles = (array) $this->container->getParameter('behat.ignore_bundles');
 
         $this->beforeSuite();
 
-        foreach ($this->container->get('kernel')->getBundles() as $bundle) {
+        foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
             if (count($testBundles) && !in_array($bundle->getName(), $testBundles)) {
                 continue;
             }
@@ -77,53 +82,17 @@ class Runner extends BaseRunner
                 continue;
             }
 
-            $contextClass = $bundle->getNamespace().'\Features\Context\FeatureContext';
-            $featuresPath = $bundle->getPath().DIRECTORY_SEPARATOR.'Features';
+            $contextClass = $this->getContextClassForBundle($bundle->getNamespace());
             if (!class_exists($contextClass)) {
                 continue;
             }
 
-            // get all the needed services
-            $pathsLocator   = $this->container->get('behat.path_locator');
-            $definitionDisp = $this->container->get('behat.definition_dispatcher');
-            $hookDisp       = $this->container->get('behat.hook_dispatcher');
-            $contextDisp    = $this->container->get('behat.context_dispatcher');
-            $contextReader  = $this->container->get('behat.context_reader');
-            $logger         = $this->container->get('behat.logger');
-            $parameters     = $contextDisp->getContextParameters();
+            $this->setMainContextClass($contextClass);
+            $this->setLocatorBasePath($featuresPath);
 
-            // load context information
-            $contextDisp->setContextClass($contextClass);
-            $contextReader->read();
-
-            // locate bundle features
-            $pathsLocator->locateBasePath($featuresPath);
-            $paths = $pathsLocator->locateFeaturesPaths();
-
-            // run bundle beforeSuite hooks
-            $hookDisp->beforeSuite(new SuiteEvent($logger, $parameters, false));
-
-            // read all features from their paths
-            foreach ($paths as $path) {
-                // parse every feature with Gherkin
-                $features = $gherkin->load((string) $path);
-
-                // and run it in FeatureTester
-                foreach ($features as $feature) {
-                    $tester = $this->container->get('behat.tester.feature');
-                    $tester->setDryRun($this->isDryRun());
-
-                    $feature->accept($tester);
-                }
-            }
-
-            // run bundle afterSuite hooks
-            $hookDisp->afterSuite(new SuiteEvent($logger, $parameters, true));
-
-            // clean definitions, transformations and hooks
-            $definitionDisp->removeDefinitions();
-            $definitionDisp->removeTransformations();
-            $hookDisp->removeHooks();
+            $hooks->beforeSuite(new SuiteEvent($logger, $parameters, false));
+            $this->runFeatures($gherkin, $this->getFeaturesPaths());
+            $hooks->afterSuite(new SuiteEvent($logger, $parameters, true));
         }
 
         $this->afterSuite();
