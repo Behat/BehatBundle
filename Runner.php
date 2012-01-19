@@ -69,8 +69,8 @@ class Runner extends BaseRunner
         $logger        = $this->getContainer()->get('behat.logger');
         $hooks         = $this->getContainer()->get('behat.hook_dispatcher');
         $parameters    = $this->getContainer()->get('behat.context_dispatcher')->getContextParameters();
-        $testBundles   = (array) $this->container->getParameter('behat.bundles');
-        $ignoreBundles = (array) $this->container->getParameter('behat.ignore_bundles');
+        $testBundles   = (array) $this->getContainer()->getParameter('behat.bundles');
+        $ignoreBundles = (array) $this->getContainer()->getParameter('behat.ignore_bundles');
 
         $this->beforeSuite();
 
@@ -86,6 +86,7 @@ class Runner extends BaseRunner
             if (!class_exists($contextClass)) {
                 continue;
             }
+            $featuresPath = $bundle->getPath().DIRECTORY_SEPARATOR.'Features';
 
             $this->setMainContextClass($contextClass);
             $this->setLocatorBasePath($featuresPath);
