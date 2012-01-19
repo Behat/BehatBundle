@@ -55,6 +55,16 @@ class Runner extends BaseRunner
     }
 
     /**
+     * Cleans context information (definitions, transformations, hooks).
+     */
+    public function cleanContextInformation()
+    {
+        $this->getContainer()->get('behat.definition_dispatcher')->removeDefinitions();
+        $this->getContainer()->get('behat.definition_dispatcher')->removeTransformations();
+        $this->getContainer()->get('behat.hook_dispatcher')->removeHooks();
+    }
+
+    /**
      * Runs feature suite.
      *
      * @return  integer CLI return code
@@ -94,6 +104,8 @@ class Runner extends BaseRunner
             $hooks->beforeSuite(new SuiteEvent($logger, $parameters, false));
             $this->runFeatures($gherkin, $this->getFeaturesPaths());
             $hooks->afterSuite(new SuiteEvent($logger, $parameters, true));
+
+            $this->cleanContextInformation();
         }
 
         $this->afterSuite();
