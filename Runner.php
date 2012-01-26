@@ -55,16 +55,6 @@ class Runner extends BaseRunner
     }
 
     /**
-     * Cleans context information (definitions, transformations, hooks).
-     */
-    public function cleanContextInformation()
-    {
-        $this->getContainer()->get('behat.definition_dispatcher')->removeDefinitions();
-        $this->getContainer()->get('behat.definition_dispatcher')->removeTransformations();
-        $this->getContainer()->get('behat.hook_dispatcher')->removeHooks();
-    }
-
-    /**
      * Runs feature suite.
      *
      * @return  integer CLI return code
