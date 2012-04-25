@@ -52,6 +52,12 @@ class Runner extends BaseRunner
         if (class_exists($bundleNamespace.'\\Features\\Context\\FeatureContext')) {
             return $bundleNamespace.'\\Features\\Context\\FeatureContext';
         }
+
+
+        $prefix = $this->getContainer()->getParameter('behat.namespace.prefix') ? '\\'.trim($this->getContainer()->getParameter('behat.namespace.prefix'), '\\') : null ;
+        if (class_exists($bundleNamespace.$prefix.'\\Features\\Context\\FeatureContext')) {
+            return $bundleNamespace.$prefix.'\\Features\\Context\\FeatureContext';
+        }
     }
 
     /**

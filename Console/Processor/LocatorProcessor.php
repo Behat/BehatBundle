@@ -35,8 +35,10 @@ class LocatorProcessor extends BaseProcessor
 
         if (preg_match('/^\@([^\/\\\\]+)(.*)$/', $input->getArgument('features'), $matches)) {
             $bundle = $container->get('kernel')->getBundle($matches[1]);
+
+            $prefix = $container->getParameter('behat.namespace.prefix') ? DIRECTORY_SEPARATOR.trim($container->getParameter('behat.namespace.prefix'), '\\')  : null;
             $input->setArgument(
-                'features', realpath($bundle->getPath()).DIRECTORY_SEPARATOR.'Features'.$matches[2]
+                'features', realpath($bundle->getPath()).$prefix.DIRECTORY_SEPARATOR.'Features'.$matches[2]
             );
         }
 
