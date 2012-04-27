@@ -64,7 +64,8 @@ class InitProcessor extends BaseProcessor
             );
         }
 
-        $featuresPath = $bundlePath.DIRECTORY_SEPARATOR.'Features';
+        $prefix = $container->getParameter('behat.namespace.prefix') ? DIRECTORY_SEPARATOR.(str_replace('\\', DIRECTORY_SEPARATOR, trim($container->get('behat.namespace.prefix'), '\\'))) : null;
+        $featuresPath = $bundlePath.$prefix.DIRECTORY_SEPARATOR.'Features';
         $locator      = $container->get('behat.path_locator');
         $basePath     = realpath($locator->getWorkPath()).DIRECTORY_SEPARATOR;
         $contextPath  = $featuresPath.DIRECTORY_SEPARATOR.'Context';
