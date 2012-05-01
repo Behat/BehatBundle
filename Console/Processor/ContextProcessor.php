@@ -48,7 +48,7 @@ class ContextProcessor extends BaseProcessor
             $bundleNamespace = $container->get('kernel')->getBundle($matches[1])->getNamespace();
         } else {
             foreach ($container->get('kernel')->getBundles() as $bundle) {
-                if (false !== strpos(realpath($featuresPath), realpath($bundle->getPath()))) {
+                if (false !== strpos(realpath($bundle->getPath()), realpath($featuresPath))) {
                     $bundleNamespace = $bundle->getNamespace();
                     break;
                 }
