@@ -1,5 +1,6 @@
 {
     "name": "behat/behat-bundle",
+    "abandoned": "friends-of-behat/symfony-extension",
     "type": "symfony-bundle",
     "description": "Behat bundle for Symfony2",
     "keywords": ["BDD", "Behat"],
